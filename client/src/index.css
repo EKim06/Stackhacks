@@ -1,0 +1,55 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&display=swap');
+
+@import "tailwindcss";
+
+/* Design tokens */
+@theme {
+  --color-primary: #f2f0ef; /* White */
+  --color-secondary: #a2a2a2; /* Light Gray */
+  --color-tertiary: #2a2a2a; /* Dark Gray */
+  --color-accent: #feb23a; /* Gold */
+  --color-background: #111111;
+  --font-main: 'Inter', sans-serif;
+}
+
+@layer base {
+  body {
+    @apply font-main text-primary bg-background;
+  }
+
+  h1 { @apply text-5xl font-bold; }
+  h2 { @apply text-4xl font-semibold; }
+  h3 { @apply text-3xl font-semibold; }
+
+  p {
+    @apply text-base leading-relaxed;
+  }
+
+  a {
+    @apply transition duration-300 ease-out hover:brightness-200 text-sm p-1;
+  }
+
+}
+
+@layer components {
+  .btn-primary {
+    @apply inline-flex items-center justify-center
+           px-4 py-2 rounded-lg text-sm m-2
+           font-medium cursor-pointer bg-accent text-black transition duration-300 ease-out hover:brightness-80;
+  }
+
+  .btn-secondary {
+    @apply inline-flex items-center justify-center
+           px-4 py-2 rounded-lg text-sm m-2 text-secondary
+           font-medium cursor-pointer border border-secondary text-black transition duration-300 ease-out hover:brightness-200;
+  }
+
+  .input {
+    @apply border border-secondary rounded px-2 py-1 text-xl bg-transparent hover:border-gray-300;
+  }
+
+  .custom-date::-webkit-calendar-picker-indicator {
+    background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="16" height="15" viewBox="0 0 24 24"><path fill="%23ffffff" d="M20 3h-1V1h-2v2H7V1H5v2H4c-1.1 0-2 .9-2 2v16c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm0 18H4V8h16v13z"/></svg>');
+    cursor: pointer;
+  }
+}
