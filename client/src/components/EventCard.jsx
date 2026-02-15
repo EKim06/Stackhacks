@@ -2,7 +2,7 @@ import React from 'react';
 import { motion } from 'framer-motion';
 import { Calendar } from 'lucide-react';
 
-const Card = ({ title, date, image, children, className, index = 0 }) => {
+const EventCard = ({ title, date, image, children, className, index = 0 }) => {
   // Check if date is in the past
   const isPast = date ? new Date(date) < new Date() : false;
   
@@ -75,4 +75,4 @@ const Card = ({ title, date, image, children, className, index = 0 }) => {
   );
 };
 
-export default Card;
+export default EventCard;

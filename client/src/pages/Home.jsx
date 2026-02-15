@@ -46,8 +46,8 @@ const Home = () => {
           </p>
 
           <div className="flex flex-col sm:flex-row gap-4 justify-center mb-16">
-            <button className='btn-primary py-2 px-6'>Learn more</button>
-            <button className='btn-secondary py-2 px-6'>Contact</button>
+            <Link to="/about" className='btn-primary py-2 px-6'>Learn more</Link>
+            <Link to="/contact" className='btn-secondary py-2 px-6'>Contact</Link>
           </div>
         </div>
 

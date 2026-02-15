@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import Card from '../components/Card';
+import EventCard from '../components/EventCard';
 import { Trash2, Edit, Plus, X } from 'lucide-react'; // Make sure to install lucide-react if needed
 
 const Events = () => {
@@ -153,14 +153,14 @@ const Events = () => {
           <div key={event._id || index} className="relative group/wrapper">
             
             {/* The Actual Card Component */}
-            <Card 
+            <EventCard 
               title={event.title} 
               date={event.date} 
               image={event.image}
               index={index}
             > 
               <p>{event.description}</p> 
-            </Card>
+            </EventCard>
 
             {/* Admin Controls (Appears on Hover) */}
             <div className="absolute top-4 right-4 flex gap-2 opacity-0 group-hover/wrapper:opacity-100 transition-opacity duration-300 z-20">
