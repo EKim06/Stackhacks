@@ -27,7 +27,7 @@ function NextArrow(props) {
    <button
      type="button"
      onClick={onClick}
-     className="absolute right-0 top-1/2 -translate-y-1/2 z-10 bg-white rounded-full p-3 shadow-lg hover:bg-accent hover:text-black transition-all -mr-4 md:-mr-12"
+     className="absolute right-0 top-1/2 -translate-y-1/2 z-10 bg-tertiary rounded-full p-3 shadow-lg hover:bg-accent hover:text-black transition-all -mr-4 md:-mr-12"
      aria-label="Next slide"
    >
      <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -44,7 +44,7 @@ function PrevArrow(props) {
    <button
      type="button"
      onClick={onClick}
-     className="absolute left-0 top-1/2 -translate-y-1/2 z-10 bg-white rounded-full p-3 shadow-lg hover:bg-accent hover:text-black transition-all -ml-4 md:-ml-12"
+     className="absolute left-0 top-1/2 -translate-y-1/2 z-10 bg-tertiary rounded-full p-3 shadow-lg hover:bg-accent hover:text-black transition-all -ml-4 md:-ml-12"
      aria-label="Previous slide"
    >
      <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -112,14 +112,14 @@ const Home = () => {
 
          <div className="flex flex-col sm:flex-row gap-4 justify-center mb-16">
            <Link
-             to="/contact"
-             className="bg-accent text-black px-8 py-4 rounded-lg font-semibold text-lg hover:brightness-110 transition-all"
+             to="/projects"
+             className="btn-primary transition-all"
            >
-             Join us
+             View Projects
            </Link>
            <Link
              to="/contact"
-             className="border-2 border-accent text-accent px-8 py-4 rounded-lg font-semibold text-lg hover:bg-accent/10 transition-all"
+             className="btn-secondary transition-all"
            >
              Get in touch
            </Link>
@@ -170,10 +170,10 @@ const Home = () => {
      <section className="py-20 px-4 sm:px-6 lg:px-8 bg-background">
        <div className="max-w-7xl mx-auto">
          <div className="text-center mb-16">
-           <h2 className="text-4xl md:text-5xl font-bold text-white mb-4">
+           <h2 className="text-4xl md:text-5xl font-bold text-primary mb-4">
              Team
            </h2>
-           <p className="text-xl text-gray-400 max-w-2xl mx-auto">
+           <p className="text-xl text-secondary max-w-2xl mx-auto">
              Meet the people behind StackHacks
            </p>
          </div>
@@ -181,12 +181,12 @@ const Home = () => {
            <Slider {...teamSettings}>
              {teamMembers.map((card, index) => (
                <div key={index} className="px-3">
-                 <div className="bg-neutral-800 border border-white/15 rounded-2xl p-8 flex flex-col items-center text-center hover:border-white/25 transition-colors min-h-[220px]">
+                 <div className="bg-tertiary border border-white/15 rounded-2xl p-8 flex flex-col items-center text-center hover:border-white/25 transition-colors min-h-[220px]">
                    {card.img && (
                      <img
                        src={card.img}
                        alt=""
-                       className="w-16 h-16 rounded-full object-cover mb-4 bg-neutral-600"
+                       className="w-16 h-16 rounded-full object-cover mb-4 "
                      />
                    )}
                    <h3 className="font-bold text-white text-xl mb-3">{card.title}</h3>
