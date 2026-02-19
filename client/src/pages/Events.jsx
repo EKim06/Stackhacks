@@ -15,7 +15,7 @@ const Events = () => {
     description: ""
   });
 
-  const API_URL = (`${import.meta.env.VITE_API_URL}/api/users`);
+  const API_URL = (`${import.meta.env.VITE_API_URL}/events`);
 
   // 1. FETCH EVENTS
   useEffect(() => {
