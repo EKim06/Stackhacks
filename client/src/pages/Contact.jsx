@@ -1,10 +1,12 @@
 import React, { useState } from 'react'
 import { motion } from "framer-motion"
 import SyncLoader from "react-spinners/SyncLoader";
+import Modal from '../components/Modal';
 
 const Contact = () => {
   const [result, setResult] = useState("");
   const [loading, setLoading] = useState(false);
+  const [open, setOpen] = useState(false);
 
   const submitForm = async (event) => {
     event.preventDefault();
@@ -19,8 +21,10 @@ const Contact = () => {
     });
 
     const data = await response.json();
-    setResult(data.success ? "Success!" : "Error");
+    setResult(data.success ? "Message Sent!" : "Error sending message. Please try again.");
+
     setLoading(false);
+    setOpen(true);
     event.target.reset();
   };
 
@@ -74,7 +78,8 @@ const Contact = () => {
             </button>
             {loading && <SyncLoader className="px-3 pt-2" color="var(--color-secondary)" size={4} speedMultiplier={0.7}/>}
           </div>
-          <p>{result}</p>
+          
+          {open && <Modal result={result} closeModal={() => setOpen(false)}/>}
         </form>
 
       </div>
