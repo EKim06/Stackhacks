@@ -1,11 +1,15 @@
 import React, { useState } from 'react'
 import { motion } from "framer-motion"
+import SyncLoader from "react-spinners/SyncLoader";
 
 const Contact = () => {
   const [result, setResult] = useState("");
+  const [loading, setLoading] = useState(false);
 
   const submitForm = async (event) => {
     event.preventDefault();
+    setLoading(true);
+
     const formData = new FormData(event.target);
     formData.append("access_key", "a47c824e-36f7-494b-aca9-73233e59fff7");
 
@@ -15,7 +19,9 @@ const Contact = () => {
     });
 
     const data = await response.json();
-    setResult(data.success ? "Success!" : "Error")
+    setResult(data.success ? "Success!" : "Error");
+    setLoading(false);
+    event.target.reset();
   };
 
   return (
@@ -40,14 +46,14 @@ const Contact = () => {
 
         {/* Right: Form */}
         <form className="flex flex-col gap-4" onSubmit={submitForm}>
-          <div className='grid grid-cols-2 gap-4'>
-            <input
+          <div className='grid md:grid-cols-2 gap-4'>
+            <input required
               className="input text-sm"
               name="name"
               type="text"
               placeholder="Enter your name"
             />
-            <input
+            <input required
               className="input text-sm"
               name="email"
               type="email"
@@ -55,17 +61,19 @@ const Contact = () => {
             />
           </div>
 
-          <textarea
+          <textarea required
             className="input resize-none text-sm"
             name="message"
             placeholder="Enter your message"
             rows="6"
           />
 
-          <button type="submit" className="btn btn-primary self-start m-0">
-            Submit
-          </button>
-
+          <div className='flex flex row'>
+            <button type="submit" className="btn-primary w-full md:w-auto m-0">
+              Submit
+            </button>
+            {loading && <SyncLoader className="px-3 pt-2" color="var(--color-secondary)" size={4} speedMultiplier={0.7}/>}
+          </div>
           <p>{result}</p>
         </form>
 

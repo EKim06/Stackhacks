@@ -31,12 +31,12 @@
 
 }
 
-@layer components {
-  .btn-primary {
-    @apply inline-flex items-center justify-center
-           px-4 py-2 rounded-lg text-sm m-2
-           font-medium cursor-pointer bg-accent text-black transition duration-300 ease-out hover:brightness-80;
-  }
+  @layer components {
+    .btn-primary {
+      @apply inline-flex items-center justify-center
+            px-4 py-2 rounded-lg text-sm m-2
+            font-medium cursor-pointer bg-accent text-black transition duration-300 ease-out hover:brightness-80;
+    }
 
   .btn-secondary {
     @apply inline-flex items-center justify-center
