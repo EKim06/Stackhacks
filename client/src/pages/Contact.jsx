@@ -1,7 +1,23 @@
-import React from 'react'
+import React, { useState } from 'react'
 import { motion } from "framer-motion"
 
 const Contact = () => {
+  const [result, setResult] = useState("");
+
+  const submitForm = async (event) => {
+    event.preventDefault();
+    const formData = new FormData(event.target);
+    formData.append("access_key", "a47c824e-36f7-494b-aca9-73233e59fff7");
+
+    const response = await fetch("https://api.web3forms.com/submit", {
+      method: "POST",
+      body: formData
+    });
+
+    const data = await response.json();
+    setResult(data.success ? "Success!" : "Error")
+  };
+
   return (
     <div className="pt-4 px-4 flex justify-center">
       <div className="min-h-[calc(80vh)] w-full max-w-6xl grid grid-cols-1 md:grid-cols-2 gap-24 items-center">
@@ -23,7 +39,7 @@ const Contact = () => {
         </motion.div>
 
         {/* Right: Form */}
-        <form className="flex flex-col gap-4">
+        <form className="flex flex-col gap-4" onSubmit={submitForm}>
           <div className='grid grid-cols-2 gap-4'>
             <input
               className="input text-sm"
@@ -46,9 +62,11 @@ const Contact = () => {
             rows="6"
           />
 
-          <button className="btn btn-primary self-start m-0">
+          <button type="submit" className="btn btn-primary self-start m-0">
             Submit
           </button>
+
+          <p>{result}</p>
         </form>
 
       </div>
