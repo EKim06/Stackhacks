@@ -12,7 +12,7 @@ const ProjectCard = ({ title, date, image, children, className, index = 0 }) => 
       transition={{ duration: 0.5, delay: index * 0.1 }}
       className="group"
     >
-      <div className={`bg-primary/5 backdrop-blur-sm rounded-2xl overflow-hidden border border-primary/10 hover:border-[#D4AF37]/50 transition-all duration-500 ${className || ''}`}>
+      <div className={`bg-primary/5 backdrop-blur-sm rounded-2xl overflow-hidden border border-primary/10 hover:border-accent/50 transition-all duration-500 ${className || ''}`}>
         {/* Image */}
         <div className="relative h-48 overflow-hidden">
           {image ? (
@@ -22,8 +22,8 @@ const ProjectCard = ({ title, date, image, children, className, index = 0 }) => 
               className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110"
             />
           ) : (
-            <div className="w-full h-full bg-gradient-to-br from-[#D4AF37]/30 to-black flex items-center justify-center">
-              <Calendar className="w-16 h-16 text-[#D4AF37]/50" />
+            <div className="w-full h-full bg-gradient-to-br from-accent/30 to-black flex items-center justify-center">
+              <Calendar className="w-16 h-16 text-accent/50" />
             </div>
           )}
           
@@ -31,7 +31,7 @@ const ProjectCard = ({ title, date, image, children, className, index = 0 }) => 
 
         {/* Content */}
         <div className="p-6">
-          <h3 className="text-xl font-bold mb-3 text-primary group-hover:text-[#D4AF37] transition-colors">
+          <h3 className="text-xl font-bold mb-3 text-primary group-hover:text-accent transition-colors">
             {title}
           </h3>
           
