@@ -23,7 +23,8 @@ const Navbar = () => {
             <Link to='/contact'>Contact</Link>
         </div>
         <div className='flex flex-row'>
-          <button className='btn-primary'> Admin </button>
+          <button className='btn-primary'> Login </button>
+          <button className='btn-secondary'> Sign Up </button>
         </div>
       </div> 
 
