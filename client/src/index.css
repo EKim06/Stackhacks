@@ -45,7 +45,7 @@
   }
 
   .input {
-    @apply border border-secondary rounded px-2 py-1 text-xl bg-transparent hover:border-gray-300;
+    @apply border border-2 border-tertiary rounded px-2 py-1 text-xl bg-transparent hover:border-secondary;
   }
 
   .custom-date::-webkit-calendar-picker-indicator {
