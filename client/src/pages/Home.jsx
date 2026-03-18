@@ -5,6 +5,20 @@ import { FaCode, FaUsers, FaRocket } from 'react-icons/fa'
 import 'slick-carousel/slick/slick.css'
 import 'slick-carousel/slick/slick-theme.css'
 
+const heroSlides = [
+  {
+    title: 'Join StackHacks',
+    description:
+      'We are a computer science club where you can build projects, learn new skills, and connect with other students.',
+    showButtons: true,
+  },
+  {
+    title: 'blahh blahh',
+    description: 'fjehg ywhuajrjdokwvf vewig',
+    showButtons: false,
+  },
+]
+
 const whatWeDo = [
   { icon: FaCode, title: 'Web Development', description: 'juhiuu' },
   { icon: FaUsers, title: 'AI', description: 'jiknjn' },
@@ -83,6 +97,12 @@ const defaultSliderSettings = {
 }
 
 const Home = () => {
+  const heroSettings = {
+    ...defaultSliderSettings,
+    slidesToShow: 1,
+    arrows: true,
+  }
+
   const whatWeDoSettings = {
     ...defaultSliderSettings,
     nextArrow: <NextArrow />,
@@ -96,36 +116,42 @@ const Home = () => {
 
 
  return (
-   <div className="min-h-screen">
-     {/* Hero Section */}
-     <section className="min-h-screen flex flex-col items-center justify-center px-4">
-       <div className="text-center max-w-4xl">
-         <h1 className="text-5xl md:text-7xl font-bold mb-6 text-primary">
-           Join StackHacks
-         </h1>
-        
-         <p className="text-xl md:text-2xl mb-10 text-primary/90 max-w-2xl mx-auto">
-           We are a computer science club where you can build projects,
-           learn new skills, and connect with other students.
-         </p>
-
-
-         <div className="flex flex-col sm:flex-row gap-4 justify-center mb-16">
-           <Link
-             to="/projects"
-             className="btn-primary transition-all"
-           >
-             View Projects
-           </Link>
-           <Link
-             to="/contact"
-             className="btn-secondary transition-all"
-           >
-             Get in touch
-           </Link>
-         </div>
-       </div>
-     </section>
+  <div className="min-h-screen">
+    {/* Hero Section as slider */}
+    <section className="min-h-screen flex flex-col items-center justify-center px-4">
+      <div className="w-full max-w-5xl">
+        <Slider {...heroSettings}>
+          {heroSlides.map((slide, index) => (
+            <div key={index}>
+              <div className="text-center">
+                <h1 className="text-5xl md:text-7xl font-bold mb-6 text-primary">
+                  {slide.title}
+                </h1>
+                <p className="text-xl md:text-2xl mb-10 text-primary/90 max-w-2xl mx-auto">
+                  {slide.description}
+                </p>
+                {slide.showButtons && (
+                  <div className="flex flex-col sm:flex-row gap-4 justify-center mb-16">
+                    <Link
+                      to="/projects"
+                      className="btn-primary transition-all"
+                    >
+                      View Projects
+                    </Link>
+                    <Link
+                      to="/contact"
+                      className="btn-secondary transition-all"
+                    >
+                      Get in touch
+                    </Link>
+                  </div>
+                )}
+              </div>
+            </div>
+          ))}
+        </Slider>
+      </div>
+    </section>
 
 
      <section id="what-we-do" className="py-20 px-4 sm:px-6 lg:px-8 bg-background">
