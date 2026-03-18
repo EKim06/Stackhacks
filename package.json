@@ -1,0 +1,15 @@
+{
+  "name": "stackhacks",
+  "private": true,
+  "version": "1.0.0",
+  "description": "Stackhacks monorepo",
+  "workspaces": [
+    "client",
+    "server"
+  ],
+  "scripts": {
+    "dev": "npm run dev --workspace=client",
+    "dev:server": "npm run start --workspace=server",
+    "build": "npm run build --workspace=client"
+  }
+}

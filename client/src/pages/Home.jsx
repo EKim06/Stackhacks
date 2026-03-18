@@ -141,11 +141,11 @@ const Home = () => {
          <div className="relative pb-12 w-full max-w-4xl px-4 md:px-8 flex justify-center">
            <div className="w-full">
            <Slider {...whatWeDoSettings}>
-             {whatWeDo.map((item, index) => {
-               const Icon = item.icon
-               return (
-                 <div key={index} className="px-3">
-                   <div className="bg-neutral-800 border border-white/15 p-8 rounded-2xl hover:border-white/25 transition-all duration-300 hover:-translate-y-1 group h-full">
+            {whatWeDo.map((item, index) => {
+              const Icon = item.icon
+              return (
+                <div key={index} className="px-3 pt-4">
+                  <div className="bg-neutral-800 border border-white/15 p-8 rounded-2xl hover:border-white/25 transition-all duration-300 hover:-translate-y-1 group h-full">
                      <div className="bg-accent/20 w-16 h-16 rounded-xl flex items-center justify-center mb-6 group-hover:bg-accent transition-colors">
                        <Icon className="text-accent group-hover:text-black transition-colors w-8 h-8" />
                      </div>
