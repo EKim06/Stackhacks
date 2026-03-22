@@ -10,7 +10,7 @@ const Projects = () => {
   useEffect(() => {
     const fetchEvents = async () => {
       try {
-        const query = `*[_type == "project"] | order(date asc) {
+        const query = `*[_type == "project"] | order(_createdAt asc) {
           _id,
           title,
           date,

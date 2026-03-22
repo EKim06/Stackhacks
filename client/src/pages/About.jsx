@@ -1,27 +1,78 @@
 
-import React from 'react'
+import {useState, useEffect} from 'react'
 import Image from "../data/img";
 import { aboutContent } from '../data/content'
 import SH from '/SH.png'
 import { Swiper, SwiperSlide } from 'swiper/react';
 import { Navigation, Pagination, Autoplay } from 'swiper/modules';
-import 'swiper/css';              // ✅ FIX 2: Added missing base Swiper CSS import
+import 'swiper/css';              
 import 'swiper/css/navigation';
 import 'swiper/css/pagination';
+import { client } from '../sanityClient';
 
 
 const About = () => {
-  const founderArray = [
-    { name: "David Ponce",           position: "Chief Executive Officer",               images: Image.David_Ponce },
-    { name: "Jack Hunter",           position: "Chief Technology Officer",              images: Image.Jack_Hunter },
-    { name: "Angelina Ponce",        position: "Chief Marketing Officer",               images: Image.Angelina_Ponce },
-    { name: "Aditya Kapoor",         position: "Chief Financial Officer",               images: Image.Aditya_Kapoor },
-    { name: "Shahida Chowdhury",     position: "Chief Operating Officer",               images: Image.Shahida_Chowdhury },
-    { name: "Hilary Rojas Rosales",  position: "Director of Professional Development", images: Image.Hilary_Rojas_Rosales },
-    { name: "Erika Nelson",          position: "Director of Communications",            images: Image.Erika_Nelson },
-    { name: "Ryan Gallego",          position: "Director of Events and Community Engagement", images: Image.Ryan_Gallego },
-    { name: "Elizabeth Tirado",      position: "Director of Team Excellence",           images: Image.Elizabeth_Tirado },
-  ]
+  const [aboutUs, setAboutUs] = useState([]);
+  const [founders, setFounders] = useState([]);
+  const [involvement, setInvolvement] = useState([]);
+  const [loading, setLoading] = useState(true);
+
+  // FETCH EVENTS
+  useEffect(() => {
+    // const fetchAbout = async () => {
+    //   try {
+    //     const query = `*[_type == "about"] | order(date asc) {
+    //       _id,
+    //       description
+    //     }`;
+
+    //     const data = await client.fetch(query);
+    //     setAboutUs(data);
+    //   } catch (e) {
+    //     console.error("Failed to fetch about from Sanity: ", e);
+    //   } finally {
+    //     setLoading(false);
+    //   }
+    // };
+    const fetchFounders = async () => {
+      try {
+        const query = `*[_type == "founder"] | order(_createdAt asc) {
+          _id,
+          name,
+          position,
+          "image": image.asset->url,
+        }`;
+
+        const data = await client.fetch(query);
+        setFounders(data);
+      } catch (e) {
+        console.error("Failed to fetch about from Sanity: ", e);
+      } finally {
+        setLoading(false);
+      }
+    };
+    // const fetchInvolvement = async () => {
+    //   try {
+    //     const query = `*[_type == "involvement"] | order(date asc) {
+    //       _id,
+    //       title,
+    //       description
+    //     }`;
+
+    //     const data = await client.fetch(query);
+    //     setInvolvement(data);
+    //   } catch (e) {
+    //     console.error("Failed to fetch about from Sanity: ", e);
+    //   } finally {
+    //     setLoading(false);
+    //   }
+    // };
+
+    //fetchAbout();
+    fetchFounders();
+    //fetchInvolvement();
+  }, []);
+
 
   const explainArray = [
     {
@@ -65,43 +116,49 @@ const About = () => {
 
       {/* ── Meet the Founders ── */}
       <section className="mb-20">
-        <h2 className="border-b border-tertiary pb-4 mb-10">Meet the Founders</h2>
-
-        {/* ✅ FIX 1: Removed the stray <div key={i}> wrapper — Swiper's direct children must be <SwiperSlide> */}
-        <Swiper
-          modules={[Navigation, Pagination, Autoplay]}
-          spaceBetween={30}
-          slidesPerView={1}
-          navigation
-          pagination={{ clickable: true }}
-          autoplay={{ delay: 3000 }}
-          breakpoints={{
-            640: { slidesPerView: 2 },
-            1024: { slidesPerView: 3 },
-          }}
-          className='pb-12'
-        >
-          {founderArray.map((el, i) => (
-            <SwiperSlide key={i}>
-              {/* ✅ FIX 3: Removed duplicate key={i} from inner div */}
-              <div className="bg-tertiary p-6 rounded-xl transition hover:scale-105 duration-300">
-                <img
-                  src={el.images}
-                  alt={el.name}
-                  className="w-full h-64 object-cover rounded-lg mb-4"
-                  width={500}
-                  height={500}
-                />
-                <h3 className="text-accent text-xl">{el.name}</h3>
-                <p className="text-secondary italic">{el.position}</p>
-              </div>
-            </SwiperSlide>
-          ))}
-        </Swiper>
+        {loading ? (
+          <div className="text-center text-gray-500 py-10">Loading Founders...</div>
+          ) : founders.length > 0 ? (
+            <> 
+              <h2 className="pb-4 mb-10">Meet the Founders</h2>
+              <Swiper
+                modules={[Navigation, Pagination, Autoplay]}
+                spaceBetween={30}
+                slidesPerView={1}
+                loop={true}
+                navigation
+                pagination
+                autoplay={{ delay: 2000 }}
+                breakpoints={{
+                  640: { slidesPerView: 2 },
+                  1024: { slidesPerView: 3 },
+                }}
+              >
+                {founders.map((el, i) => (
+                  <SwiperSlide key={el._id || i} >
+                    <div className="bg-tertiary p-6 rounded-xl">
+                      <img
+                        src={el.image} 
+                        alt={el.name}
+                        className="w-full h-64 object-cover rounded-lg mb-4"
+                        width={500}
+                        height={500}
+                      />
+                      <h3 className="text-accent text-xl">{el.name}</h3>
+                      <p className="text-secondary italic">{el.position}</p>
+                    </div>
+                  </SwiperSlide>
+                ))}
+              </Swiper>
+            </>
+        ) : (
+          <div className="text-center text-secondary/50 py-10">
+            No founders found.
+          </div> 
+        )}
       </section>
 
       {/* ── How to Get Involved ── */}
-      {/* ✅ FIX 4: Restructured JSX — all sections now properly nested inside the single root <div> */}
       <section className='bg-tertiary/30 p-10 rounded-2xl mb-10'>
         <h2 className="mb-10 text-3xl font-bold border-b border-tertiary pb-4 text-accent">
           How to Get Involved
@@ -115,11 +172,6 @@ const About = () => {
           ))}
         </div>
       </section>
-
-      <div>
-        <button className="btn-primary">View Current Projects</button>
-        <button className="btn-secondary ml-4">Contact Us</button>
-      </div>
 
     </div>
   )
