@@ -128,6 +128,7 @@ const About = () => {
                 loop={true}
                 navigation
                 pagination
+                speed={800}
                 autoplay={{ delay: 2000 }}
                 breakpoints={{
                   640: { slidesPerView: 2 },

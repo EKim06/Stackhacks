@@ -54,7 +54,7 @@ const Contact = () => {
               Any questions for us?
             </h1>
             <p className="text-secondary">
-              Leave a message for StackHacks and our team will get back to you as soon as possible. Don't forget to introduce yourself in your message!
+              Leave a message for StackHacks and our team will get back to you as soon as possible. Our E-mail: stackhacks@binghamton.edu
             </p>
           </motion.div>
 
@@ -101,7 +101,7 @@ const Contact = () => {
           animate={{ opacity: 1 }}
           transition={{ delay: 1 }}
         >
-          <span className="text-secondary text-xs font-medium uppercase tracking-widest group-hover:text-primary transition-colors">
+          <span className="text-secondary text-xs font-medium uppercase tracking-widest group-hover:text-primary transition-colors pt-8">
             Frequently Asked Questions
           </span>
           <motion.div
