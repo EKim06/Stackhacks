@@ -6,6 +6,6 @@ export default {
     { name: 'title', title: 'Title', type: 'string' },
     { name: 'subtitle', title: 'Subtitle', type: 'string' },
     { name: 'text', title: 'Text', type: 'string' },
-    { name: 'src', title: 'Image', type: 'image', options: { hotspot: true } },
+    { name: 'image', title: 'Image', type: 'image', options: { hotspot: true } },
   ],
 }

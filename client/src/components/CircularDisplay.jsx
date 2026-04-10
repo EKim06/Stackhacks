@@ -146,8 +146,8 @@ export const CircularDisplay = ({
         <div className="image-container" ref={imageContainerRef}>
           {testimonials.map((testimonial, index) => (
             <img
-              key={testimonial.src}
-              src={testimonial.src}
+              key={testimonial.image}
+              src={testimonial.image}
               alt={testimonial.title}
               className="testimonial-image"
               data-index={index}

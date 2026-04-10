@@ -29,7 +29,7 @@ const About = () => {
             title,
             subtitle,
             text,
-            "src": image.asset->url,
+            "image": image.asset->url,
           }`),
         ]);
         setFounders(foundersData);
