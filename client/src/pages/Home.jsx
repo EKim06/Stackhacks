@@ -1,22 +1,37 @@
-import React from 'react'
+import React, { useCallback, useState } from 'react'
 import { Link } from 'react-router-dom'
 import Slider from 'react-slick'
 import { FaCode, FaUsers, FaRocket } from 'react-icons/fa'
+import { LogoCloud } from '@/components/ui/logo-cloud-3'
+import ScrollExpandMedia from '@/components/ui/scroll-expansion-hero'
+import { cn } from '@/lib/utils'
+import logoGtis from '@/img/Orgs/gtis.avif'
+import logoBloomberg from '@/img/Orgs/bloomberg.png'
+import logoIntel from '@/img/Orgs/intel.png'
+import logoOracle from '@/img/Orgs/orcale.png'
+import logoCapitalOne from '@/img/Orgs/captial.jpeg'
+import logoAmazon from '@/img/Orgs/amazon.png'
+import logoCiti from '@/img/Orgs/citi.png'
+import logoInfosys from '@/img/Orgs/infosys.jpeg'
+import logoJaneStreet from '@/img/Orgs/jane.png'
+import logoNasa from '@/img/Orgs/nasa.jpeg'
+import logoRre from '@/img/Orgs/rre ventures.jpeg'
 import 'slick-carousel/slick/slick.css'
 import 'slick-carousel/slick/slick-theme.css'
 
-const heroSlides = [
-  {
-    title: 'Join StackHacks',
-    description:
-      'We are a computer science club where you can build projects, learn new skills, and connect with other students.',
-    showButtons: true,
-  },
-  {
-    title: 'blahh blahh',
-    description: 'fjehg ywhuajrjdokwvf vewig',
-    showButtons: false,
-  },
+/** Local org logos (`src/img/Orgs`). Full-color assets — no invert filter. */
+const partnerLogos = [
+  { src: logoGtis, alt: 'GTIS Partners', monochrome: false },
+  { src: logoBloomberg, alt: 'Bloomberg', monochrome: false },
+  { src: logoIntel, alt: 'Intel', monochrome: false },
+  { src: logoOracle, alt: 'Oracle', monochrome: false },
+  { src: logoCapitalOne, alt: 'Capital One', monochrome: false },
+  { src: logoAmazon, alt: 'Amazon', monochrome: false },
+  { src: logoCiti, alt: 'Citi', monochrome: false },
+  { src: logoInfosys, alt: 'Infosys', monochrome: false },
+  { src: logoJaneStreet, alt: 'Jane Street', monochrome: false },
+  { src: logoNasa, alt: 'NASA', monochrome: false },
+  { src: logoRre, alt: 'RRE Ventures', monochrome: false },
 ]
 
 const whatWeDo = [
@@ -97,11 +112,18 @@ const defaultSliderSettings = {
 }
 
 const Home = () => {
-  const heroSettings = {
-    ...defaultSliderSettings,
-    slidesToShow: 1,
-    arrows: true,
-  }
+  const [showHeroOverlay, setShowHeroOverlay] = useState(true)
+  const [heroFadingOut, setHeroFadingOut] = useState(false)
+  const [pageFadingIn, setPageFadingIn] = useState(false)
+
+  const beginIntroExit = useCallback(() => {
+    setPageFadingIn(true)
+    setHeroFadingOut(true)
+    window.setTimeout(() => {
+      setShowHeroOverlay(false)
+      window.scrollTo(0, 0)
+    }, 750)
+  }, [])
 
   const whatWeDoSettings = {
     ...defaultSliderSettings,
@@ -114,64 +136,37 @@ const Home = () => {
     prevArrow: <PrevArrow />,
   }
 
+  const pageBody = (
+    <div className="bg-background text-primary">
+      <section className="px-4 py-14 text-center sm:px-6">
+        <h2 className="mb-4 text-4xl font-bold text-primary md:text-5xl">What we do</h2>
+        <p className="mx-auto mb-8 max-w-2xl text-lg text-secondary">
+          We are a computer science club where you can build projects, learn new skills, and connect
+          with other students.
+        </p>
+        <div className="flex flex-col justify-center gap-4 sm:flex-row">
+          <Link to="/projects" className="btn-primary transition-all">
+            View Projects
+          </Link>
+          <Link to="/contact" className="btn-secondary transition-all">
+            Get in touch
+          </Link>
+        </div>
+      </section>
 
- return (
-  <div className="min-h-screen">
-    {/* Hero Section as slider */}
-    <section className="min-h-screen flex flex-col items-center justify-center px-4">
-      <div className="w-full max-w-5xl">
-        <Slider {...heroSettings}>
-          {heroSlides.map((slide, index) => (
-            <div key={index}>
-              <div className="text-center">
-                <h1 className="text-5xl md:text-7xl font-bold mb-6 text-primary">
-                  {slide.title}
-                </h1>
-                <p className="text-xl md:text-2xl mb-10 text-primary/90 max-w-2xl mx-auto">
-                  {slide.description}
-                </p>
-                {slide.showButtons && (
-                  <div className="flex flex-col sm:flex-row gap-4 justify-center mb-16">
-                    <Link
-                      to="/projects"
-                      className="btn-primary transition-all"
-                    >
-                      View Projects
-                    </Link>
-                    <Link
-                      to="/contact"
-                      className="btn-secondary transition-all"
-                    >
-                      Get in touch
-                    </Link>
-                  </div>
-                )}
-              </div>
-            </div>
-          ))}
-        </Slider>
-      </div>
-    </section>
-
-
-     <section id="what-we-do" className="py-20 px-4 sm:px-6 lg:px-8 bg-background">
+     <section id="what-we-do" className="pt-6 pb-16 sm:pt-8 sm:pb-20 px-4 sm:px-6 lg:px-8 bg-background">
        <div className="max-w-7xl mx-auto flex flex-col items-center">
-         <div className="text-center mb-16 w-full">
-           <h2 className="text-4xl md:text-5xl font-bold text-white mb-4">
-             What we do
-           </h2>
-           <p className="text-xl text-gray-400 max-w-2xl mx-auto">
-             jknkljkmnkj m
-           </p>
-         </div>
+         <h3 className="mb-8 w-full max-w-4xl text-center text-2xl font-semibold text-primary md:text-3xl">
+           Project team
+         </h3>
          <div className="relative pb-12 w-full max-w-4xl px-4 md:px-8 flex justify-center">
            <div className="w-full">
            <Slider {...whatWeDoSettings}>
             {whatWeDo.map((item, index) => {
               const Icon = item.icon
               return (
-                <div key={index} className="px-3 pt-4">
-                  <div className="bg-neutral-800 border border-white/15 p-8 rounded-2xl hover:border-white/25 transition-all duration-300 hover:-translate-y-1 group h-full">
+                <div key={index} className="px-3 pt-4 h-full">
+                  <div className="flex h-full min-h-[260px] flex-col bg-neutral-800 border border-white/15 p-8 rounded-2xl hover:border-white/25 transition-all duration-300 hover:-translate-y-1 group">
                      <div className="bg-accent/20 w-16 h-16 rounded-xl flex items-center justify-center mb-6 group-hover:bg-accent transition-colors">
                        <Icon className="text-accent group-hover:text-black transition-colors w-8 h-8" />
                      </div>
@@ -190,7 +185,6 @@ const Home = () => {
          </div>
        </div>
      </section>
-
 
      {/* Team Section */}
      <section className="py-20 px-4 sm:px-6 lg:px-8 bg-background">
@@ -225,23 +219,81 @@ const Home = () => {
        </div>
      </section>
 
-     <style>{` .slick-dots li button:before {
-     font-size: 12px;
-     color: #feb23a;
-     }
-     
-     .slick-dots li.slick-active button:before {
-     color: #feb23a;
-     opacity: 1;
-     } `
-     }
-     
-     </style>
+     <section className="relative bg-background px-4 py-16 sm:px-6 lg:px-8">
+       <div
+         aria-hidden="true"
+         className={cn(
+           'pointer-events-none absolute -top-1/2 left-1/2 -z-10 h-[120vmin] w-[120vmin] -translate-x-1/2 rounded-b-full',
+           'bg-[radial-gradient(ellipse_at_center,rgba(242,240,239,0.08),transparent_50%)]',
+           'blur-[30px]'
+         )}
+       />
+       <div className="relative mx-auto max-w-3xl">
+         <h2 className="mb-5 text-center text-lg font-medium leading-snug tracking-tight text-foreground md:text-2xl">
+           <span className="text-muted-foreground">
+             StackHacks members and alumni have professional experience with:
+           </span>
+         </h2>
+         <LogoCloud logos={partnerLogos} />
+       </div>
+     </section>
 
-     {/*Next Section Here*/}
+     <style>{`
+       #what-we-do .slick-track {
+         display: flex !important;
+         align-items: stretch;
+       }
+       #what-we-do .slick-slide {
+         height: auto;
+         display: flex !important;
+       }
+       #what-we-do .slick-slide > div {
+         height: 100%;
+         width: 100%;
+       }
+       .slick-dots li button:before {
+         font-size: 12px;
+         color: #feb23a;
+       }
+       .slick-dots li.slick-active button:before {
+         color: #feb23a;
+         opacity: 1;
+       }
+     `}</style>
+    </div>
+  )
 
-   </div>
- )
+  return (
+    <div className="relative min-h-[100dvh] bg-background">
+      <div
+        className={cn(
+          'transition-opacity duration-700 ease-out',
+          pageFadingIn ? 'opacity-100' : 'pointer-events-none opacity-0'
+        )}
+      >
+        {pageBody}
+      </div>
+      {showHeroOverlay && (
+        <div
+          className={cn(
+            'fixed inset-0 z-40 transition-opacity duration-700 ease-out',
+            heroFadingOut ? 'pointer-events-none opacity-0' : 'opacity-100'
+          )}
+        >
+          <ScrollExpandMedia
+            mediaType="image"
+            mediaSrc="/SH.png"
+            title="S H"
+            date="StackHacks"
+            scrollToExpand="Scroll to explore"
+            onIntroComplete={beginIntroExit}
+          >
+            {null}
+          </ScrollExpandMedia>
+        </div>
+      )}
+    </div>
+  )
 }
 
 
