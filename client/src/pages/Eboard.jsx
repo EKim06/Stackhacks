@@ -3,6 +3,7 @@ import Slider from "react-slick";
 import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
 import { client } from "../sanityClient";
+// Eboard
 
 // Separate Card Component
 function Card({ image, title, name, description }) {
