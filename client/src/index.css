@@ -42,45 +42,47 @@
             font-medium cursor-pointer bg-accent text-black transition duration-300 ease-out hover:brightness-80;
     }
 
-  .btn-secondary {
-    @apply inline-flex items-center justify-center
-           px-4 py-2 rounded-lg text-sm m-2 text-secondary
-           font-medium cursor-pointer border border-secondary text-black transition duration-300 ease-out hover:brightness-200;
-  }
+    .btn-secondary {
+      @apply inline-flex items-center justify-center
+            px-4 py-2 rounded-lg text-sm m-2 text-secondary
+            font-medium cursor-pointer border border-secondary text-black transition duration-300 ease-out hover:brightness-200;
+    }
 
-  .input {
-    @apply border border-2 border-tertiary rounded px-2 py-1 text-xl bg-transparent hover:border-secondary;
-  }
+    .input {
+      @apply border border-2 border-tertiary rounded px-2 py-1 text-xl bg-transparent hover:border-secondary;
+    }
 
-  .custom-date::-webkit-calendar-picker-indicator {
-    background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="16" height="15" viewBox="0 0 24 24"><path fill="%23ffffff" d="M20 3h-1V1h-2v2H7V1H5v2H4c-1.1 0-2 .9-2 2v16c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm0 18H4V8h16v13z"/></svg>');
-    cursor: pointer;
-  }
+    .custom-date::-webkit-calendar-picker-indicator {
+      background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="16" height="15" viewBox="0 0 24 24"><path fill="%23ffffff" d="M20 3h-1V1h-2v2H7V1H5v2H4c-1.1 0-2 .9-2 2v16c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm0 18H4V8h16v13z"/></svg>');
+      cursor: pointer;
+    }
 
-  .slick-slide .card {
-    transform: scale(0.8);
-    opacity: 0.6;
-    transition: all 0.3s ease;
-  }
+    .slick-slide .card {
+      transform: scale(0.8);
+      opacity: 0.6;
+      transition: all 0.3s ease;
+    }
 
-  .slick-center .card {
-    transform: scale(1);
-    opacity: 1;
-  }
-  .swiper {
-    --swiper-navigation-color: var(--color-accent);
-    --swiper-pagination-color: var(--color-accent);
-    --swiper-navigation-size: 30px;
+    .slick-center .card {
+      transform: scale(1);
+      opacity: 1;
+    }
+    .swiper {
+      --swiper-navigation-color: var(--color-accent);
+      --swiper-pagination-color: var(--color-accent);
+      --swiper-navigation-size: 30px;
 
-    padding-bottom: 40px !important;
-  }
+      padding-bottom: 40px !important;
+    }
 
-  .swiper-pagination-bullet {
-    background-color: var(--color-secondary) !important;
-    opacity: 1 !important;
-  }
+    .swiper-pagination-bullet {
+      background-color: var(--color-secondary) !important;
+      opacity: 1 !important;
+    }
 
-  .swiper-pagination-bullet-active {
-    background-color: var(--color-accent) !important;
-  } 
+    .swiper-pagination-bullet-active {
+      background-color: var(--color-accent) !important;
+    } 
+
+
 }
