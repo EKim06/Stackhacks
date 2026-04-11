@@ -219,11 +219,11 @@ const Home = () => {
        </div>
      </section>
 
-     <section className="relative bg-background px-4 py-16 sm:px-6 lg:px-8">
+     <section className="relative overflow-hidden bg-background px-4 py-10 sm:px-6 sm:py-12 lg:px-8">
        <div
          aria-hidden="true"
          className={cn(
-           'pointer-events-none absolute -top-1/2 left-1/2 -z-10 h-[120vmin] w-[120vmin] -translate-x-1/2 rounded-b-full',
+           'pointer-events-none absolute -top-1/2 left-1/2 -z-10 h-[min(90vmin,42rem)] w-[min(90vmin,42rem)] -translate-x-1/2 rounded-b-full',
            'bg-[radial-gradient(ellipse_at_center,rgba(242,240,239,0.08),transparent_50%)]',
            'blur-[30px]'
          )}
