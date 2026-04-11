@@ -6,19 +6,26 @@ import { client } from "../sanityClient";
 
 // Separate Card Component
 function Card({ image, title, name, description }) {
+  const [expanded, setExpanded] = useState(false);
+
   return (
     <div className="px-3">
-      <div className="card flex flex-col items-center gap-3 w-full border border-gray-200 rounded-2xl shadow-md p-6 transition-all duration-300 hover:scale-105 hover:shadow-2xl hover:border-accent cursor-pointer">
+      <div
+        onClick={() => setExpanded(!expanded)}
+        className="card flex flex-col items-center gap-3 w-full border border-gray-200 rounded-2xl shadow-md p-6 transition-all duration-300 hover:scale-103 hover:shadow-2xl hover:border-accent cursor-pointer"
+      >
         <img
           src={image}
           alt={title}
-          className="w-full h-48 object-cover rounded-lg"
+          className="w-full h-100 object-cover rounded-lg"
         />
-        <h1 className="font-bold text-xl">{title}</h1>
-        <h3 className="text-accent text-center">{name}</h3>
-        <p className="text-sm text-gray-600 text-center">
-          {description || "[No Description]"}
-        </p>
+        <h1 className="text-center font-bold">{name}</h1>
+        <h2 className="text-accent">{title}</h2>
+        {expanded && (
+          <p className="text-sm text-gray-600 text-center">
+            {description || "[No Description]"}
+          </p>
+        )}
       </div>
     </div>
   );
@@ -27,19 +34,34 @@ function Card({ image, title, name, description }) {
 const Eboard = () => {
   const [events, setEvents] = useState([]);
   const [loading, setLoading] = useState(true);
+  const [slidesToShow, setSlidesToShow] = useState(1);
+
+  const getSlidesToShow = (width) => {
+    if (width < 768) return 1;
+    if (width < 1024) return 2;
+    return 3;
+  };
+
+  useEffect(() => {
+    // Set correct value immediately on mount
+    setSlidesToShow(getSlidesToShow(window.innerWidth));
+
+    const handleResize = () => {
+      setSlidesToShow(getSlidesToShow(window.innerWidth));
+    };
+
+    window.addEventListener("resize", handleResize);
+    return () => window.removeEventListener("resize", handleResize);
+  }, []);
 
   const settings = {
     dots: true,
-    infinite: events.length > 3, // Only infinite if there are enough items
+    infinite: events.length > slidesToShow,
     speed: 500,
-    slidesToShow: 3,
+    slidesToShow, // ← driven by state, not slick's responsive
     slidesToScroll: 1,
-    centerMode: true,
+    centerMode: slidesToShow === 3, // only center on desktop
     centerPadding: "0px",
-    responsive: [
-      { breakpoint: 1024, settings: { slidesToShow: 2 } },
-      { breakpoint: 640, settings: { slidesToShow: 1 } },
-    ],
   };
 
   useEffect(() => {
@@ -66,7 +88,7 @@ const Eboard = () => {
   }, []);
 
   return (
-    <div className="w-full px-10 py-10">
+    <div className="eboard-slider w-full px-3 sm:px-10 py-20 overflow-hidden">
       {loading ? (
         <div className="text-center text-gray-500 py-10">Loading Eboard...</div>
       ) : events.length > 0 ? (

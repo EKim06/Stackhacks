@@ -59,8 +59,17 @@
     transition: all 0.3s ease;
   }
 
+  .eboard-slider .slick-list {
+    overflow: visible !important;
+  }
+
+  .eboard-slider .slick-prev,
+  .slick-next { 
+    z-index: 50;
+  }
+
   .slick-center .card {
-    transform: scale(1);
+    transform: scale(1.1);
     opacity: 1;
   }
   .swiper {
