@@ -1,53 +1,54 @@
-import React, { useState } from 'react'
 import { Link } from 'react-router-dom'
-import { AiOutlineClose, AiOutlineMenu } from 'react-icons/ai'
 import SH from '/SH.png'
+import StaggeredMenu from './StaggeredMenu'
+
+const menuItems = [
+  { label: 'Projects', ariaLabel: 'View projects', link: '/projects' },
+  { label: 'About',    ariaLabel: 'About us',       link: '/about' },
+  { label: 'E‑Board',  ariaLabel: 'View E-Board',   link: '/eboard' },
+  { label: 'Events',   ariaLabel: 'View events',    link: '/events' },
+  { label: 'Contact',  ariaLabel: 'Contact us',     link: '/contact' },
+]
 
 const Navbar = () => {
-  const [nav, setNav] = useState(false);
-  
-  const handleNav = () => {
-    setNav(!nav);
-  }
-
   return (
-    <main className='fixed z-50 bg-background'>
-      {/* Laptop View */}
-      <div className='hidden md:flex flex-row justify-between max-w-[70%] items-center mx-auto'>
-        <Link className = 'text-accent flex flex-row items-center hover:brightness-100' to='/'> <img src={SH} alt='logo' className='transition-transform duration-200 ease-out w-8 m-1 hover:scale-110'/> StackHacks</Link>
+    <main className='fixed z-50 bg-background w-full'>
+
+      {/* ── Laptop View (unchanged) ── */}
+      <div className='hidden lg:flex flex-row justify-between max-w-[70%] items-center mx-auto'>
+        <Link className='text-accent flex flex-row items-center hover:brightness-100' to='/'>
+          <img src={SH} alt='logo' className='transition-transform duration-200 ease-out w-8 m-1 hover:scale-110'/>
+          StackHacks
+        </Link>
         <div className='gap-5 flex flex-row p-1 text-secondary items-center'>
-            <Link to='/projects'>Projects</Link>
-            <Link to='/about'>About</Link>
-            <Link to='/eboard'>E-Board</Link>
-            <Link to='/events'>Events</Link>
-            <Link to='/contact'>Contact</Link>
+          <Link to='/projects'>Projects</Link>
+          <Link to='/about'>About</Link>
+          <Link to='/eboard'>E-Board</Link>
+          <Link to='/events'>Events</Link>
+          <Link to='/contact'>Contact</Link>
         </div>
-      </div> 
+      </div>
 
       {/* Mobile View */}
-      <div className='md:hidden p-1'>
-      
-        {/* 1. Wrap the icon in a flex container and push it to the end (right) */}
-        <div className="flex justify-between cursor-pointer items-center">
-          <Link className = 'text-accent flex flex-row items-center hover:brightness-100' to='/'> <img src={SH} alt='logo' className='w-10 m-1'/> StackHacks</Link>
-          {!nav ? (
-            <AiOutlineMenu className='hover:brightness-90' onClick={handleNav} size={30}/>
-          ) : (
-            <AiOutlineClose className='hover:brightness-90' onClick={handleNav} size={30}/>
-          )}
-        </div>
+      <div className='lg:hidden flex justify-between items-center p-1'>
+        <Link className='text-accent flex flex-row items-center' to='/'>
+          <img src={SH} alt='logo' className='w-10 m-1 ' />
+          StackHacks
+        </Link>
 
-        {/* 2. The menu list sits below. flex-col keeps text on the left by default. */}
-        {nav && 
-          <div className='flex text-secondary flex-col'> 
-            <Link to='/projects' className='py-2' onClick={handleNav}>Projects</Link>
-            <Link to='/about' className='py-2' onClick={handleNav}>About</Link>
-            <Link to='/eboard' className='py-2' onClick={handleNav}>E-Board</Link>
-            <Link to='/events' className='py-2' onClick={handleNav}>Events</Link>
-            <Link to='/contact' className='py-2' onClick={handleNav}>Contact</Link>
-          </div>}
-          
+        {/* StaggeredMenu now only renders the button here; panel floats via fixed positioning */}
+        <StaggeredMenu
+          position="right"
+          items={menuItems}
+          logoUrl={SH}
+          colors={['var(--color-accent)', 'var(--color-tertiary)']}
+          menuButtonColor="var(--color-secondary)"
+          displaySocials={false}
+          displayItemNumbering={false}
+          closeOnClickAway={true}
+        />
       </div>
+
       <div className='w-screen border-b border-b-tertiary'/>
     </main>
   )
