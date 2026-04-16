@@ -4,6 +4,7 @@ import { useMotionValueEvent, useScroll } from 'framer-motion'
 import Hero from '../components/Hero'
 
 
+
 const teamMembers = [
   { title: 'TBD', text: 'Core team add your execs here once you have them.', img: null },
   { title: 'TBD', text: 'Core team add your execs here once you have them.', img: null },
@@ -15,6 +16,7 @@ const teamMembers = [
 const HOME_HEADER_LOGO_THRESHOLD_PX = 100
 
 function Home() {
+
   const heroRef = useRef(null)
   return (
     <div className="relative min-h-[100dvh] bg-background">

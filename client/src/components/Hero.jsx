@@ -1,9 +1,13 @@
 import React from 'react'
+import { useState, useEffect } from 'react'
+import { client } from '../sanityClient'
+
 
 // --- Utility ---
 function cn(...classes) {
   return classes.filter(Boolean).join(' ')
 }
+
 
 // --- Button ---
 function Button({ asChild, children, size = 'md', variant = 'default', className, ...props }) {
@@ -94,6 +98,32 @@ function ProgressiveBlur({ className, direction = 'left', blurIntensity = 1 }) {
 }
 
 export default function Hero() {
+
+    const [companies, setCompanies] = useState([])
+    const [loading, setLoading] = useState(true)
+
+    // FETCH EVENTS
+    useEffect(() => {
+    const fetchCompanies = async () => {
+        try {
+        const query = `*[_type == "company"] | order(_createdAt asc) {
+            _id,
+            title,
+            "image": image.asset->url,
+        }`;
+
+        const data = await client.fetch(query);
+        setCompanies(data);
+        } catch (e) {
+        console.error("Failed to fetch companies from Sanity: ", e);
+        } finally {
+        setLoading(false);
+        }
+    };
+
+    fetchCompanies();
+    }, []);
+
   return (
     <main className="overflow-x-hidden">
       <section>
@@ -144,14 +174,18 @@ export default function Hero() {
 
             <div className="relative py-6 md:w-[calc(100%-11rem)]">
               <InfiniteSlider speedOnHover={20} speed={40} gap={112}>
-                <img className="mx-auto h-5 w-fit dark:invert" src="https://html.tailus.io/blocks/customers/nvidia.svg" alt="Nvidia Logo" />
-                <img className="mx-auto h-4 w-fit dark:invert" src="https://html.tailus.io/blocks/customers/column.svg" alt="Column Logo" />
-                <img className="mx-auto h-4 w-fit dark:invert" src="https://html.tailus.io/blocks/customers/github.svg" alt="GitHub Logo" />
-                <img className="mx-auto h-5 w-fit dark:invert" src="https://html.tailus.io/blocks/customers/nike.svg" alt="Nike Logo" />
-                <img className="mx-auto h-5 w-fit dark:invert" src="https://html.tailus.io/blocks/customers/lemonsqueezy.svg" alt="Lemon Squeezy Logo" />
-                <img className="mx-auto h-4 w-fit dark:invert" src="https://html.tailus.io/blocks/customers/laravel.svg" alt="Laravel Logo" />
-                <img className="mx-auto h-7 w-fit dark:invert" src="https://html.tailus.io/blocks/customers/lilly.svg" alt="Lilly Logo" />
-                <img className="mx-auto h-6 w-fit dark:invert" src="https://html.tailus.io/blocks/customers/openai.svg" alt="OpenAI Logo" />
+              {loading ? (
+                  <p className="text-sm text-secondary">Loading...</p>
+                ) : (
+                  companies.map((company) => (
+                    <img
+                      key={company._id}
+                      className="mx-auto h-5 w-fit dark:invert"
+                      src={company.image}
+                      alt={`${company.title} Logo`}
+                    />
+                  ))
+                )}
               </InfiniteSlider>
 
               <div className="bg-linear-to-r from-background absolute inset-y-0 left-0 w-20"></div>
