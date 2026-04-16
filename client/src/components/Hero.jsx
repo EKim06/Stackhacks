@@ -132,7 +132,7 @@ export default function Hero() {
   return (
     <main className="overflow-x-hidden">
       <section>
-        <div className="pb-24 pt-12 md:pb-32 lg:pb-56 lg:pt-30">
+        <div className="pb-24 pt-12 md:pb-32 lg:pb-56 lg:pt-30 border-b border-tertiary">
           <div className="relative mx-auto flex max-w-6xl flex-col px-6 lg:block">
             <div className="mx-auto max-w-lg text-center lg:ml-0 lg:w-1/2 lg:text-left">
               <h1 className="mt-8 max-w-2xl text-balance text-5xl font-medium md:text-6xl lg:mt-16 xl:text-7xl">
@@ -181,19 +181,19 @@ export default function Hero() {
         </div>
       </section>
 
-      <section className="bg-background pb-16 md:pb-32">
-        <div className="group relative m-auto max-w-6xl px-6">
+      <section className="bg-background pb-12 border-b border-tertiary">
+        <div className="group relative m-auto max-w-6xl px-6 pt-12">
           <div className="flex flex-col items-center md:flex-row">
             <div className="md:max-w-44 md:border-r md:pr-6">
-              <p className="text-end text-sm">Our Professional Experience</p>
+              <p className="text-end text-sm font-bold">Our professional experience</p>
             </div>
 
             <div className="relative py-6 md:w-[calc(100%-11rem)]">
-              <InfiniteSlider speed={30} speedOnHover={10} gap={112}>
+              <InfiniteSlider speed={30} speedOnHover={10} gap={60}>
                 {!loading && companies.map((company) => (
-                  <div key={company._id} className="flex items-center justify-center w-32 h-12">
+                  <div key={company._id} className="flex items-center justify-center w-40 h-24 p-4 rounded-2xl border border-tertiary border-3 bg-background shadow-sm">
                     <img
-                      className=" max-w-full max-h-full object-contain"
+                      className="w-full h-full object-contain transition-all hover:grayscale-0 hover:brightness-120"
                       src={company.image}
                       alt={`${company.title} Logo`}
                     />
