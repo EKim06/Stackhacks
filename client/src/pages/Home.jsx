@@ -1,6 +1,6 @@
-import { useCallback, useEffect, useLayoutEffect, useRef } from 'react'
+import { useRef } from 'react'
 import { Link } from 'react-router-dom'
-import { useMotionValueEvent, useScroll } from 'framer-motion'
+import { motion } from 'framer-motion'
 import Hero from '../components/Hero'
 
 
@@ -13,19 +13,21 @@ const teamMembers = [
   { title: 'TBD', text: 'Core team add your execs here once you have them.', img: null },
 ]
 
-const HOME_HEADER_LOGO_THRESHOLD_PX = 100
-
 function Home() {
 
   const heroRef = useRef(null)
   return (
     <div className="relative min-h-[100dvh] bg-background">
       <div className="bg-background text-primary">
-        {/* Hero Section */}
-        <div ref={heroRef}>
-          <Hero />
-        </div>
-
+        <motion.div 
+          initial={{ opacity: 0, y: 30 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true }}
+          transition={{ duration: 0.5, delay: 0.1 }} 
+        >
+          {/* Hero Section */}
+          <div ref={heroRef}><Hero /></div>
+        </motion.div>
         {/* Intro CTA Section */}
         <section className="px-4 py-14 text-center sm:px-6">
           <h2 className="mb-4 text-4xl font-bold text-primary md:text-5xl">Get involved</h2>
