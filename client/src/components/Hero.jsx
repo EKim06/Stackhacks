@@ -191,7 +191,7 @@ export default function Hero() {
             <div className="relative py-6 md:w-[calc(100%-11rem)]">
               <InfiniteSlider speed={30} speedOnHover={10} gap={60}>
                 {!loading && companies.map((company) => (
-                  <div key={company._id} className="flex items-center justify-center w-40 h-24 p-4 rounded-2xl border border-tertiary border-3 bg-background shadow-sm">
+                  <div key={company._id} className="flex items-center justify-center w-40 h-24 p-4 rounded-2xl bg-background shadow-sm">
                     <img
                       className="w-full h-full object-contain transition-all hover:grayscale-0 hover:brightness-120"
                       src={company.image}
