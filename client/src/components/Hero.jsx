@@ -158,8 +158,8 @@ export default function Hero() {
               >
                 <div className="mt-12 flex flex-col items-center justify-center gap-2 sm:flex-row lg:justify-start">
                   <Button size="lg" className="px-5 text-base" variant="accent">
-                      <Link to="/projects">
-                        Our Projects
+                      <Link to="/about">
+                        About Us
                       </Link>
                   </Button>
 

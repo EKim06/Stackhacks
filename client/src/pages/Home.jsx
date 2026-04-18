@@ -4,8 +4,8 @@ import { motion } from 'framer-motion'
 import Hero from '../components/Hero'
 import RadialOrbitalTimeline from '../components/Radial-orbital-timeline'
 import { Button } from '../components/Button'
-import { Card, CardContent, CardHeader, CardTitle } from '../components/Card'
 import { Code2, Brain, Shield, Repeat } from 'lucide-react'
+import { TextEffect } from '../components/Text'
 
 const projectTeamData = [
   {
@@ -58,14 +58,6 @@ const projectTeamData = [
   },
 ]
 
-const teamMembers = [
-  { title: 'TBD', text: 'Core team add your execs here once you have them.', img: null },
-  { title: 'TBD', text: 'Core team add your execs here once you have them.', img: null },
-  { title: 'TBD', text: 'Core team add your execs here once you have them.', img: null },
-  { title: 'TBD', text: 'Core team add your execs here once you have them.', img: null },
-  { title: 'TBD', text: 'Core team add your execs here once you have them.', img: null },
-]
-
 function Home() {
   const heroRef = useRef(null)
 
@@ -84,11 +76,27 @@ function Home() {
         </motion.div>
 
         <section className="px-4 py-14 text-center sm:px-6">
-          <h2 className="mb-4 text-4xl font-bold text-primary md:text-5xl">Get involved</h2>
-          <p className="mx-auto mb-8 max-w-2xl text-lg text-secondary">
-            We are a computer science club where you can build projects, learn new skills, and connect
-            with other students.
-          </p>
+          <TextEffect
+            as="h2"
+            per="word"
+            preset="slide"
+            inView
+            className="mb-4 text-4xl font-bold text-primary md:text-5xl"
+          >
+            Get involved
+          </TextEffect>
+
+          <TextEffect
+            as="p"
+            per="word"
+            preset="fade"
+            inView
+            delay={0.2}
+            className="mx-auto mb-8 max-w-2xl text-lg text-secondary"
+          >
+            We are a computer science club where you can build projects, learn new skills, and connect with other students.
+          </TextEffect>
+
           <div className="flex flex-col justify-center gap-4 sm:flex-row sm:justify-center">
             <Button asChild variant="primary" className="m-0">
               <Link to="/events">View upcoming events</Link>
@@ -106,29 +114,6 @@ function Home() {
             </div>
 
             <RadialOrbitalTimeline timelineData={projectTeamData} />
-          </div>
-        </section>
-
-        <section className="bg-background px-4 py-20 sm:px-6 lg:px-8">
-          <div className="mx-auto max-w-7xl">
-            <div className="mb-16 text-center">
-              <h2 className="mb-4 text-4xl font-bold text-primary md:text-5xl">Team</h2>
-              <p className="mx-auto max-w-2xl text-xl text-secondary">Meet the people behind StackHacks</p>
-            </div>
-
-            <div className="grid grid-cols-1 gap-6 md:grid-cols-3">
-              {teamMembers.slice(0, 3).map((card, index) => (
-                <Card key={`${card.title}-${index}`} className="flex min-h-[220px] flex-col items-center text-center transition-colors hover:border-white/25">
-                  <CardHeader className="flex w-full flex-col items-center pb-2">
-                    {card.img ? (
-                      <img src={card.img} alt="" className="mb-4 h-16 w-16 rounded-full object-cover" />
-                    ) : null}
-                    <CardTitle className="text-xl text-white">{card.title}</CardTitle>
-                  </CardHeader>
-                  <CardContent className="text-base leading-relaxed text-gray-300">{card.text}</CardContent>
-                </Card>
-              ))}
-            </div>
           </div>
         </section>
       </div>
