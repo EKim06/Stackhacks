@@ -174,7 +174,7 @@ export default function Hero() {
 
             <img
               className=" pointer-events-none order-first lg:ml-auto h-40 w-auto object-contain sm:h-56 lg:absolute lg:inset-0 lg:-right-10 lg:-top-20 lg:h-[500px] lg:w-auto lg:order-last"
-              src='/SH.png'
+              src="/SHTrans.png"
               alt="StackHacks Logo"
             />
           </div>

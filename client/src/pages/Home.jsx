@@ -6,6 +6,9 @@ import RadialOrbitalTimeline from '../components/Radial-orbital-timeline'
 import { Button } from '../components/Button'
 import { Code2, Brain, Shield, Repeat } from 'lucide-react'
 import { TextEffect } from '../components/Text'
+import Constellation from '../components/Constellation'
+
+
 
 const projectTeamData = [
   {
@@ -63,6 +66,7 @@ function Home() {
 
   return (
     <div className="relative min-h-[100dvh] bg-background">
+      <Constellation />
       <div className="bg-background text-primary">
         <motion.div
           initial={{ opacity: 0, y: 30 }}
