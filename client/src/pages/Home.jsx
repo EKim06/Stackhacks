@@ -107,7 +107,7 @@ function Home() {
         <section className="px-4 py-10 sm:px-6 sm:py-12 lg:px-8">
           <div className="mx-auto max-w-5xl">
             <div className="mb-8 text-center">
-              <h2 className="mb-2 text-3xl font-bold text-primary md:text-4xl">Project Team</h2>
+              <h2 className="mb-2 text-3xl font-bold text-accent md:text-4xl">Project Team</h2>
               <p className="mx-auto max-w-xl text-base text-secondary md:text-lg">
                 Explore the different tracks and click to learn more.
               </p>

@@ -192,21 +192,21 @@ export default function RadialOrbitalTimeline({ timelineData }) {
         >
           {/* Faint concentric rings (center depth) */}
           <div
-            className="pointer-events-none absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 rounded-full border border-white/[0.04]"
+            className="pointer-events-none absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 rounded-full border border-accent/[0.07]"
             style={{ width: orbitDiameter + 120, height: orbitDiameter + 120 }}
           />
           <div
-            className="pointer-events-none absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 rounded-full border border-white/[0.06]"
+            className="pointer-events-none absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 rounded-full border border-accent/[0.11]"
             style={{ width: orbitDiameter + 56, height: orbitDiameter + 56 }}
           />
           <div
-            className="pointer-events-none absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 rounded-full border border-white/[0.08]"
+            className="pointer-events-none absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 rounded-full border border-accent/[0.16]"
             style={{ width: orbitDiameter + 8, height: orbitDiameter + 8 }}
           />
 
           {/* Orbit path */}
           <div
-            className="pointer-events-none absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 rounded-full border border-white/15"
+            className="pointer-events-none absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 rounded-full border border-accent/45 shadow-[0_0_28px_rgba(254,178,58,0.08)]"
             style={{ width: orbitDiameter, height: orbitDiameter }}
           />
 
@@ -242,13 +242,13 @@ export default function RadialOrbitalTimeline({ timelineData }) {
                   }}
                 >
                   <div
-                    className={`flex h-11 w-11 items-center justify-center rounded-full border-2 border-white/35 bg-background/60 text-white shadow-[0_0_18px_rgba(255,255,255,0.1)] backdrop-blur-sm transition-[box-shadow,border-color,transform] duration-300 ease-out group-hover:border-white/55 group-hover:shadow-[0_0_26px_rgba(255,255,255,0.16)] ${
-                      isPulsing ? 'animate-pulse ring-2 ring-accent/50' : ''
-                    } ${isRelated && !isExpanded ? 'ring-1 ring-white/40' : ''} ${isExpanded ? 'scale-105 border-white/50' : ''}`}
+                    className={`flex h-11 w-11 items-center justify-center rounded-full border-2 border-accent/55 bg-background/60 text-accent shadow-[0_0_20px_rgba(254,178,58,0.28)] backdrop-blur-sm transition-[box-shadow,border-color,transform] duration-300 ease-out group-hover:border-accent group-hover:shadow-[0_0_30px_rgba(254,178,58,0.4)] ${
+                      isPulsing ? 'animate-pulse ring-2 ring-accent/60' : ''
+                    } ${isRelated && !isExpanded ? 'ring-1 ring-accent/50' : ''} ${isExpanded ? 'scale-105 border-accent shadow-[0_0_34px_rgba(254,178,58,0.45)]' : ''}`}
                   >
-                    <Icon className="text-white" size={18} strokeWidth={1.35} />
+                    <Icon className="text-accent" size={18} strokeWidth={1.35} />
                   </div>
-                  <span className="max-w-[7rem] text-center text-[11px] font-medium tracking-wide text-white/55">
+                  <span className="max-w-[7rem] text-center text-[11px] font-medium tracking-wide text-accent/85">
                     {caption}
                   </span>
                 </button>
@@ -274,10 +274,10 @@ export default function RadialOrbitalTimeline({ timelineData }) {
                   exit={{ opacity: 0, y: -8 }}
                   transition={{ duration: 0.22, ease: [0.22, 1, 0.36, 1] }}
                 >
-                  <Card className="w-full rounded-xl border border-white/25 bg-black text-primary shadow-[0_12px_48px_rgba(0,0,0,0.55)]">
+                  <Card className="w-full rounded-xl border border-accent/35 bg-black text-primary shadow-[0_12px_48px_rgba(0,0,0,0.55),0_0_0_1px_rgba(254,178,58,0.06)]">
                   <CardHeader className="space-y-3 pb-0">
                     <div className="flex items-center justify-between gap-3">
-                      <Badge className="border border-white/70 bg-transparent px-2.5 py-0.5 text-[10px] font-semibold uppercase tracking-widest text-white">
+                      <Badge className="border border-accent/60 bg-transparent px-2.5 py-0.5 text-[10px] font-semibold uppercase tracking-widest text-accent">
                         {statusUppercase(openItem.status)}
                       </Badge>
                       <span className="shrink-0 text-xs text-secondary">{openItem.date}</span>
@@ -303,7 +303,7 @@ export default function RadialOrbitalTimeline({ timelineData }) {
                               <button
                                 key={relatedId}
                                 type="button"
-                                className="inline-flex items-center gap-1 rounded border border-white/25 bg-transparent px-2.5 py-1.5 text-xs font-medium text-primary transition hover:bg-white/5"
+                                className="inline-flex items-center gap-1 rounded border border-accent/35 bg-transparent px-2.5 py-1.5 text-xs font-medium text-accent/95 transition hover:border-accent/55 hover:bg-accent/5"
                                 onClick={(e) => {
                                   e.stopPropagation()
                                   toggleItem(relatedId)
