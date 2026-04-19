@@ -67,7 +67,6 @@ const About = () => {
 
     {/* ── About Us (Circular Testimonials) ── */}
     <section className="mb-20">
-      <h1 className='text-center my-10 text-accent'>About Us</h1>
       {loading ? (
         <div className="text-center text-gray-500 py-10">Loading...</div>
       ) : (
