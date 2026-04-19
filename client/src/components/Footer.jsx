@@ -4,7 +4,7 @@ import SH from '/SH.png'
 
 const Footer = () => {
   return (
-    <div className='grid grid-cols-1 xl:grid-cols-2 items-center border-t border-t-tertiary'>
+    <div className='grid grid-cols-1 xl:grid-cols-2 items-center border-t border-t-tertiary bg-background z-50'>
       
       <div className='col-start-1 p-8 max-w-[75%]'>
         <div className='flex flex-row items-center'> 
