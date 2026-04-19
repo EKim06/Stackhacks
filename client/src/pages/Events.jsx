@@ -35,7 +35,7 @@ const Events = () => {
       <h1 className='text-center py-5 text-4xl font-bold text-primary tracking-wider uppercase'>Events</h1>
       
       {/* --- EVENTS LIST --- */}
-      <div className='flex flex-col max-w-5xl mx-auto gap-6 px-4 pb-20'>
+      <div className='grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 max-w-5xl mx-auto gap-6 px-4 pb-20'>
 
         {loading ? ( 
             /* IF LOADING */
