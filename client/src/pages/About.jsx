@@ -102,7 +102,7 @@ const About = () => {
             <h2 className="pb-4 mb-10">Meet the Founders</h2>
             <Swiper
               modules={[Navigation, Pagination, Autoplay]}
-              spaceBetween={30}
+              spaceBetween={-50}
               slidesPerView={1}
               loop={true}
               navigation
@@ -116,16 +116,16 @@ const About = () => {
             >
               {founders.map((el, i) => (
                 <SwiperSlide key={el._id || i}>
-                  <div className="bg-tertiary p-6 rounded-xl">
+                  <div className="bg-tertiary p-6 mb-12 rounded-xl w-[75%] mx-auto">
                     <img
                       src={el.image}
                       alt={el.name}
-                      className="w-full h-64 object-cover rounded-lg mb-4"
+                      className="w-60 h-64 object-cover rounded-lg mb-4 mx-auto"
                       width={500}
                       height={500}
                     />
-                    <h3 className="text-accent text-xl">{el.name}</h3>
-                    <p className="text-secondary italic">{el.position}</p>
+                    <h3 className="text-accent text-xl text-center">{el.name}</h3>
+                    <p className="text-secondary italic text-center">{el.position}</p>
                   </div>
                 </SwiperSlide>
               ))}
