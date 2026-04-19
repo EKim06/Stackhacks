@@ -12,7 +12,7 @@ const menuItems = [
 
 const Navbar = () => {
   return (
-    <main className='fixed z-50 bg-background w-full'>
+    <main className="fixed z-[500] w-full bg-background">
 
       {/* ── Laptop View (unchanged) ── */}
       <div className='hidden lg:flex flex-row justify-between max-w-[70%] items-center mx-auto'>
