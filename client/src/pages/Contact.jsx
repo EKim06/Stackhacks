@@ -96,7 +96,7 @@ const Contact = () => {
                       className="input"
                       name="name"
                       type="text"
-                      placeholder="e.g. Maya Lin"
+                      placeholder="e.g. David Ponce"
                     />
                   </div>
                   <div className="space-y-1.5">
