@@ -1,6 +1,6 @@
 import { useState, useRef, useEffect } from "react"
 import { AnimatePresence, motion } from "framer-motion"
-import { X, ArrowUpRight, Code2 } from "lucide-react"
+import { X, Code2 } from "lucide-react"
 
 const ProjectCard = ({ title, date, image, children, className, index = 0 }) => {
   const [active, setActive] = useState(false)
@@ -55,13 +55,6 @@ const ProjectCard = ({ title, date, image, children, className, index = 0 }) => 
               </div>
             )}
             <div className="absolute inset-0 bg-gradient-to-t from-[#0d0d0e] via-black/20 to-transparent" />
-            
-            {/* Quick Open Indicator Badge */}
-            <div className="absolute bottom-3 right-3">
-              <span className="w-8 h-8 rounded-full border border-white/15 bg-black/60 backdrop-blur-md flex items-center justify-center text-secondary group-hover:text-accent group-hover:border-accent/50 transition-colors">
-                <ArrowUpRight className="w-4 h-4" />
-              </span>
-            </div>
           </div>
 
           {/* Card Body */}
@@ -75,11 +68,6 @@ const ProjectCard = ({ title, date, image, children, className, index = 0 }) => 
               <h3 className="text-lg font-semibold text-primary group-hover:text-accent transition-colors leading-snug">
                 {title}
               </h3>
-            </div>
-
-            <div className="pt-2 text-xs text-secondary/70 flex items-center justify-between border-t border-white/[0.06]">
-              <span>Click to view details</span>
-              <span className="text-accent group-hover:translate-x-1 transition-transform">&rarr;</span>
             </div>
           </div>
         </div>

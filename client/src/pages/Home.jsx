@@ -1,65 +1,60 @@
-import { useRef } from 'react'
+import { useRef, useState, useEffect } from 'react'
 import { Link } from 'react-router-dom'
 import { motion } from 'framer-motion'
 import Hero from '../components/Hero'
 import RadialOrbitalTimeline from '../components/Radial-orbital-timeline'
-import { Code2, Brain, Shield, Repeat, ArrowRight } from 'lucide-react'
+import { icons, ArrowRight, Code } from 'lucide-react'
 import { TextEffect } from '../components/Text'
 import Constellation from '../components/Constellation'
+import { client } from '../sanityClient'
 
-const projectTeamData = [
-  {
-    id: 1,
-    title: 'Web Development',
-    orbitLabel: 'Web',
-    icon: Code2,
-    date: 'Current',
-    content: 'Build full-stack websites, dashboards, and real-world web applications with modern tech stacks.',
-    category: 'Web',
-    relatedIds: [2, 4],
-    status: 'in-progress',
-    energy: 90,
-  },
-  {
-    id: 2,
-    title: 'Artificial Intelligence',
-    orbitLabel: 'AI',
-    icon: Brain,
-    date: 'Current',
-    content: 'Explore machine learning models, neural networks, and intelligent multi-agent systems.',
-    category: 'AI',
-    relatedIds: [1],
-    status: 'in-progress',
-    energy: 80,
-  },
-  {
-    id: 3,
-    title: 'Cybersecurity',
-    orbitLabel: 'Security',
-    icon: Shield,
-    date: 'Current',
-    content: 'Master defensive tools, vulnerability testing, and ethical offensive security practices.',
-    category: 'Security',
-    relatedIds: [1],
-    status: 'pending',
-    energy: 65,
-  },
-  {
-    id: 4,
-    title: 'Recreating Apps',
-    orbitLabel: 'App Decon',
-    icon: Repeat,
-    date: 'Current',
-    content: 'Deconstruct and rebuild production apps to understand real-world system design and architectures.',
-    category: 'Projects',
-    relatedIds: [1],
-    status: 'in-progress',
-    energy: 85,
-  },
-]
+// Smart dynamic icon resolver: access ANY Lucide icon by name without manual imports
+const getTrackIcon = (name) => {
+  if (!name) return Code
+  if (name === 'Code2') return icons.CodeXml || Code
+  return icons[name] || Code
+}
 
 function Home() {
   const heroRef = useRef(null)
+  const [tracks, setTracks] = useState([])
+  const [loadingTracks, setLoadingTracks] = useState(true)
+
+  useEffect(() => {
+    const fetchTracks = async () => {
+      try {
+        const query = `*[_type == "projectTrack"] | order(order asc, _createdAt asc) {
+          _id,
+          title,
+          orbitLabel,
+          icon,
+          content,
+          order,
+          "relatedIds": relatedTracks[]->._id
+        }`
+        const data = await client.fetch(query)
+        if (data && data.length > 0) {
+          const formatted = data.map((track, idx) => ({
+            id: track._id || idx + 1,
+            title: track.title,
+            orbitLabel: track.orbitLabel || track.title,
+            icon: getTrackIcon(track.icon),
+            content: track.content || '',
+            relatedIds: track.relatedIds ? track.relatedIds.filter(Boolean) : [],
+          }))
+          setTracks(formatted)
+        } else {
+          setTracks([])
+        }
+      } catch (err) {
+        console.error('Failed to fetch project tracks from Sanity:', err)
+      } finally {
+        setLoadingTracks(false)
+      }
+    }
+
+    fetchTracks()
+  }, [])
 
   return (
     <div className="relative min-h-screen bg-background">
@@ -141,7 +136,17 @@ function Home() {
               </p>
             </motion.div>
 
-            <RadialOrbitalTimeline timelineData={projectTeamData} />
+            {tracks.length > 0 ? (
+              <RadialOrbitalTimeline timelineData={tracks} />
+            ) : loadingTracks ? (
+              <div className="py-24 text-center text-sm text-secondary/60">
+                Loading active tracks...
+              </div>
+            ) : (
+              <div className="py-24 text-center text-sm text-secondary/50">
+                No active project tracks published yet.
+              </div>
+            )}
           </div>
         </section>
       </div>

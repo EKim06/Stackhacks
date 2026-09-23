@@ -4,10 +4,9 @@ import { useState, useEffect, useRef, useCallback } from 'react'
 import { Link } from 'react-router-dom'
 import { AnimatePresence, motion } from 'framer-motion'
 import { ArrowRight, Link2 } from 'lucide-react'
-import { Badge } from './Badge'
 import { Card, CardContent, CardFooter, CardHeader, CardTitle } from './Card'
 
-const ORBIT_RADIUS_PX = 150
+const ORBIT_RADIUS_PX = 165
 const ROTATION_ANIM_MS = 520
 
 function shortestDeltaDeg(from, toDeg) {
@@ -17,12 +16,6 @@ function shortestDeltaDeg(from, toDeg) {
   if (d > 180) d -= 360
   if (d < -180) d += 360
   return d
-}
-
-function statusUppercase(status) {
-  if (status === 'completed') return 'COMPLETE'
-  if (status === 'in-progress') return 'IN PROGRESS'
-  return 'PENDING'
 }
 
 export default function RadialOrbitalTimeline({ timelineData }) {
@@ -108,7 +101,7 @@ export default function RadialOrbitalTimeline({ timelineData }) {
       const newState = { ...prev }
 
       Object.keys(newState).forEach((key) => {
-        if (parseInt(key, 10) !== id) {
+        if (key !== String(id)) {
           newState[key] = false
         }
       })
@@ -181,11 +174,11 @@ export default function RadialOrbitalTimeline({ timelineData }) {
 
   return (
     <div
-      className="flex min-h-[420px] w-full items-center justify-center overflow-visible bg-background py-6 sm:py-8"
+      className="flex min-h-[450px] w-full items-center justify-center overflow-visible bg-background py-6 sm:py-8"
       ref={containerRef}
       onClick={handleContainerClick}
     >
-      <div className="relative h-[380px] w-full max-w-2xl overflow-visible sm:h-[400px]">
+      <div className="relative h-[410px] w-full max-w-2xl overflow-visible sm:h-[430px]">
         <div
           className="absolute inset-0 flex items-center justify-center overflow-visible"
           ref={orbitRef}
@@ -242,13 +235,13 @@ export default function RadialOrbitalTimeline({ timelineData }) {
                   }}
                 >
                   <div
-                    className={`flex h-11 w-11 items-center justify-center rounded-full border-2 border-accent/55 bg-background/60 text-accent shadow-[0_0_20px_rgba(254,178,58,0.28)] backdrop-blur-sm transition-[box-shadow,border-color,transform] duration-300 ease-out group-hover:border-accent group-hover:shadow-[0_0_30px_rgba(254,178,58,0.4)] ${
+                    className={`flex h-14 w-14 sm:h-15 sm:w-15 items-center justify-center rounded-full border-2 border-accent/60 bg-background/70 text-accent shadow-[0_0_24px_rgba(254,178,58,0.32)] backdrop-blur-md transition-[box-shadow,border-color,transform] duration-300 ease-out group-hover:scale-110 group-hover:border-accent group-hover:shadow-[0_0_36px_rgba(254,178,58,0.5)] ${
                       isPulsing ? 'animate-pulse ring-2 ring-accent/60' : ''
-                    } ${isRelated && !isExpanded ? 'ring-1 ring-accent/50' : ''} ${isExpanded ? 'scale-105 border-accent shadow-[0_0_34px_rgba(254,178,58,0.45)]' : ''}`}
+                    } ${isRelated && !isExpanded ? 'ring-2 ring-accent/50' : ''} ${isExpanded ? 'scale-110 border-accent shadow-[0_0_40px_rgba(254,178,58,0.55)]' : ''}`}
                   >
-                    <Icon className="text-accent" size={18} strokeWidth={1.35} />
+                    <Icon className="text-accent" size={22} strokeWidth={1.5} />
                   </div>
-                  <span className="max-w-[7rem] text-center text-[11px] font-medium tracking-wide text-accent/85">
+                  <span className="max-w-[7.5rem] text-center text-xs sm:text-[13px] font-semibold tracking-wide text-accent/90">
                     {caption}
                   </span>
                 </button>
@@ -275,13 +268,7 @@ export default function RadialOrbitalTimeline({ timelineData }) {
                   transition={{ duration: 0.22, ease: [0.22, 1, 0.36, 1] }}
                 >
                   <Card className="w-full rounded-xl border border-accent/35 bg-black text-primary shadow-[0_12px_48px_rgba(0,0,0,0.55),0_0_0_1px_rgba(254,178,58,0.06)]">
-                  <CardHeader className="space-y-3 pb-0">
-                    <div className="flex items-center justify-between gap-3">
-                      <Badge className="border border-accent/60 bg-transparent px-2.5 py-0.5 text-[10px] font-semibold uppercase tracking-widest text-accent">
-                        {statusUppercase(openItem.status)}
-                      </Badge>
-                      <span className="shrink-0 text-xs text-secondary">{openItem.date}</span>
-                    </div>
+                  <CardHeader className="space-y-1 pb-0">
                     <CardTitle className="text-xl font-bold tracking-tight text-white">{openItem.title}</CardTitle>
                   </CardHeader>
                   <CardContent className="space-y-0 pt-4">

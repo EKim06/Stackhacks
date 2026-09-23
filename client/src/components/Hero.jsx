@@ -169,7 +169,7 @@ export default function Hero() {
           <div className="flex flex-col md:flex-row items-center gap-6">
             <div className="md:max-w-44 md:border-r border-white/10 md:pr-6 shrink-0 text-center md:text-right">
               <span className="text-xs uppercase tracking-wider text-secondary/70 font-semibold block">
-                Members Alumni At
+                Our Professional Experience
               </span>
             </div>
 

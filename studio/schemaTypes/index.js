@@ -4,5 +4,6 @@ import faq from './faq'
 import eboard from './eboard'
 import founders from './founder'
 import company from './company'
+import projectTrack from './projectTrack'
 
-export const schemaTypes = [event, project, faq, eboard, founders, company]
+export const schemaTypes = [event, project, faq, eboard, founders, company, projectTrack]

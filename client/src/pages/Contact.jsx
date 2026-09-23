@@ -108,7 +108,7 @@ const Contact = () => {
                       className="input"
                       name="email"
                       type="email"
-                      placeholder="e.g. maya@binghamton.edu"
+                      placeholder="e.g. user@binghamton.edu"
                     />
                   </div>
                 </div>

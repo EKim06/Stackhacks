@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react"
 import { client } from "../sanityClient"
 import { motion, AnimatePresence } from "framer-motion"
-import { X, Linkedin, Instagram, Github, Mail } from "lucide-react"
+import { X, Linkedin, Instagram, Github, Mail, Globe } from "lucide-react"
 
 function MemberModal({ member, onClose }) {
   useEffect(() => {
@@ -61,13 +61,16 @@ function MemberModal({ member, onClose }) {
 
           {/* Social Row in Modal */}
           {(() => {
-            const hasAnyCustom = Boolean(member.linkedin || member.instagram || member.github || member.email)
+            const hasAnyCustom = Boolean(member.linkedin || member.instagram || member.github || member.email || member.website)
             const linkedinUrl = member.linkedin || (!hasAnyCustom ? "https://www.linkedin.com/company/stackhacks" : null)
             const instagramUrl = member.instagram || (!hasAnyCustom ? "https://www.instagram.com/stackhacksbu/?hl=en" : null)
             const githubUrl = member.github || (!hasAnyCustom ? "https://github.com/stackhacksbu" : null)
             const emailUrl = member.email
               ? (member.email.startsWith("mailto:") ? member.email : `mailto:${member.email}`)
               : (!hasAnyCustom ? "mailto:stackhacksbu@gmail.com" : null)
+            const websiteUrl = member.website
+              ? (member.website.startsWith("http") ? member.website : `https://${member.website}`)
+              : null
 
             return (
               <div className="flex items-center gap-3 pt-2 text-secondary">
@@ -113,6 +116,17 @@ function MemberModal({ member, onClose }) {
                     <Mail className="w-4 h-4" />
                   </a>
                 )}
+                {websiteUrl && (
+                  <a
+                    href={websiteUrl}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    aria-label="Website"
+                    className="p-2 rounded-lg bg-white/[0.04] border border-white/10 hover:text-accent hover:border-accent/40 transition-colors"
+                  >
+                    <Globe className="w-4 h-4" />
+                  </a>
+                )}
               </div>
             )
           })()}
@@ -133,13 +147,16 @@ function MemberModal({ member, onClose }) {
 }
 
 function MemberCard({ member, onClick, index }) {
-  const hasAnyCustom = Boolean(member.linkedin || member.instagram || member.github || member.email)
+  const hasAnyCustom = Boolean(member.linkedin || member.instagram || member.github || member.email || member.website)
   const linkedinUrl = member.linkedin || (!hasAnyCustom ? "https://www.linkedin.com/company/stackhacks" : null)
   const instagramUrl = member.instagram || (!hasAnyCustom ? "https://www.instagram.com/stackhacksbu/?hl=en" : null)
   const githubUrl = member.github || (!hasAnyCustom ? "https://github.com/stackhacksbu" : null)
   const emailUrl = member.email
     ? (member.email.startsWith("mailto:") ? member.email : `mailto:${member.email}`)
     : (!hasAnyCustom ? "mailto:stackhacksbu@gmail.com" : null)
+  const websiteUrl = member.website
+    ? (member.website.startsWith("http") ? member.website : `https://${member.website}`)
+    : null
 
   return (
     <motion.div
@@ -221,6 +238,17 @@ function MemberCard({ member, onClick, index }) {
             <Mail className="w-4 h-4" />
           </a>
         )}
+        {websiteUrl && (
+          <a
+            href={websiteUrl}
+            target="_blank"
+            rel="noopener noreferrer"
+            aria-label={`${member.name} Website`}
+            className="p-1.5 rounded-md hover:text-accent hover:bg-white/[0.05] transition-colors"
+          >
+            <Globe className="w-4 h-4" />
+          </a>
+        )}
       </div>
     </motion.div>
   )
@@ -234,9 +262,9 @@ const Eboard = () => {
   useEffect(() => {
     const fetchMembers = async () => {
       try {
-        const data = await client.fetch(`*[_type == "eboard"] | order(date asc) {
-          _id, name, title, description,
-          linkedin, instagram, github, email,
+        const data = await client.fetch(`*[_type == "eboard"] | order(defined(position) desc, position asc, _createdAt asc) {
+          _id, name, title, description, position,
+          linkedin, instagram, github, email, website,
           "image": image.asset->url,
         }`)
         setMembers(data || [])
