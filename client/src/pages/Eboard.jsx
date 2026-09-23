@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from "react"
+import { createPortal } from "react-dom"
 import { client } from "../sanityClient"
 import { motion, AnimatePresence } from "framer-motion"
 import { X, Linkedin, Instagram, Github, Mail, Globe } from "lucide-react"
@@ -14,9 +15,9 @@ function MemberModal({ member, onClose }) {
     }
   }, [onClose])
 
-  return (
+  return createPortal(
     <motion.div
-      className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/75 backdrop-blur-md"
+      className="fixed inset-0 z-[100] flex items-center justify-center p-4 bg-black/80 backdrop-blur-md"
       initial={{ opacity: 0 }}
       animate={{ opacity: 1 }}
       exit={{ opacity: 0 }}
@@ -142,7 +143,8 @@ function MemberModal({ member, onClose }) {
           <X className="w-4 h-4" />
         </button>
       </motion.div>
-    </motion.div>
+    </motion.div>,
+    document.body
   )
 }
 

@@ -1,4 +1,5 @@
 import { useState, useRef, useEffect } from "react"
+import { createPortal } from "react-dom"
 import { AnimatePresence, motion } from "framer-motion"
 import { X, Code2 } from "lucide-react"
 
@@ -75,13 +76,13 @@ const ProjectCard = ({ title, date, image, children, className, index = 0 }) => 
 
       {/* Expanded Modal (Using hardware-accelerated GPU opacity & scale — NO layoutId lag or scrollbar jitter) */}
       <AnimatePresence>
-        {active && (
+        {active && createPortal(
           <motion.div
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
             transition={{ duration: 0.2 }}
-            className="fixed inset-0 z-50 flex items-center justify-center p-4 sm:p-6 bg-black/75 backdrop-blur-md"
+            className="fixed inset-0 z-[100] flex items-center justify-center p-4 sm:p-6 bg-black/75 backdrop-blur-md"
             onClick={() => setActive(false)}
           >
             <motion.div
@@ -137,7 +138,8 @@ const ProjectCard = ({ title, date, image, children, className, index = 0 }) => 
                 </div>
               </div>
             </motion.div>
-          </motion.div>
+          </motion.div>,
+          document.body
         )}
       </AnimatePresence>
     </>

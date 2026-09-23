@@ -16,7 +16,7 @@ function App() {
       <ScrollToTop />
       <Navbar />
 
-      <main className="relative z-0 flex-grow pt-16">
+      <main className="flex-grow pt-16">
         <Routes>
           <Route path="/" element={<Home />} />
           <Route path="/projects" element={<Projects />} />

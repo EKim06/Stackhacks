@@ -1,4 +1,5 @@
 import React, { useEffect, useState, useMemo } from 'react'
+import { createPortal } from 'react-dom'
 import { client } from '../sanityClient'
 import { motion, AnimatePresence } from 'framer-motion'
 import { ChevronLeft, ChevronRight, Clock, MapPin, ExternalLink, Calendar as CalendarIcon, X } from 'lucide-react'
@@ -23,9 +24,9 @@ function EventDetailModal({ event, onClose }) {
 
   const eventDate = event.date ? new Date(event.date) : null
 
-  return (
+  return createPortal(
     <motion.div
-      className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/75 backdrop-blur-md"
+      className="fixed inset-0 z-[100] flex items-center justify-center p-4 sm:p-6 bg-black/80 backdrop-blur-md"
       initial={{ opacity: 0 }}
       animate={{ opacity: 1 }}
       exit={{ opacity: 0 }}
@@ -33,68 +34,78 @@ function EventDetailModal({ event, onClose }) {
       onClick={onClose}
     >
       <motion.div
-        className="relative bg-[#141416] border border-white/15 flex flex-col rounded-2xl overflow-hidden shadow-2xl w-full max-w-xl max-h-[85vh]"
+        className="relative bg-[#141416] border border-white/15 flex flex-col md:flex-row rounded-2xl overflow-hidden shadow-2xl w-full max-w-4xl h-[560px] max-h-[90vh]"
         initial={{ opacity: 0, scale: 0.94, y: 16 }}
         animate={{ opacity: 1, scale: 1, y: 0 }}
         exit={{ opacity: 0, scale: 0.94, y: 16 }}
         transition={{ duration: 0.25, ease: [0.16, 1, 0.3, 1] }}
         onClick={(e) => e.stopPropagation()}
       >
+        {/* Left Column: Enlarged container displaying full image without warping */}
         {event.image && (
-          <div className="relative h-56 w-full overflow-hidden bg-white/[0.02]">
-            <img
-              src={event.image}
-              alt={event.title}
-              className="w-full h-full object-cover"
-            />
-            <div className="absolute inset-0 bg-gradient-to-t from-[#141416] via-transparent to-transparent" />
+          <div className="md:w-1/2 w-full h-1/2 md:h-full shrink-0 flex items-center justify-center p-4 sm:p-6 bg-black/40 border-b md:border-b-0 md:border-r border-white/10">
+            <div className="w-full h-full flex items-center justify-center rounded-xl bg-black/50 border border-white/10 p-2 overflow-hidden shadow-inner">
+              <img
+                src={event.image}
+                alt={event.title}
+                className="w-full h-full object-contain drop-shadow-md"
+              />
+            </div>
           </div>
         )}
 
-        <div className="p-6 sm:p-8 space-y-4 overflow-y-auto">
-          <div>
-            <span className="text-xs font-semibold uppercase tracking-wider text-accent">
-              Event Details
-            </span>
-            <h2 className="text-2xl font-semibold text-primary mt-1">
-              {event.title}
-            </h2>
+        {/* Right Column: Event Details with fixed layout & internal scrolling for description */}
+        <div className={`${event.image ? 'md:w-1/2 w-full h-1/2 md:h-full' : 'w-full h-full'} p-6 sm:p-8 flex flex-col justify-between overflow-hidden`}>
+          {/* Top section: Title and Metadata (pinned) */}
+          <div className="shrink-0 space-y-3">
+            <div>
+              <span className="text-xs font-semibold uppercase tracking-wider text-accent">
+                Event Details
+              </span>
+              <h2 className="text-2xl sm:text-3xl font-bold text-primary mt-1 leading-snug">
+                {event.title}
+              </h2>
+            </div>
+
+            {eventDate && !isNaN(eventDate.getTime()) && (
+              <div className="space-y-2 py-3 border-y border-white/[0.08] text-sm text-secondary">
+                <div className="flex items-center gap-2">
+                  <CalendarIcon className="w-4 h-4 text-accent shrink-0" />
+                  <span>
+                    {eventDate.toLocaleDateString('en-US', {
+                      weekday: 'long',
+                      month: 'long',
+                      day: 'numeric',
+                      year: 'numeric',
+                    })}
+                  </span>
+                </div>
+                <div className="flex items-center gap-2">
+                  <Clock className="w-4 h-4 text-accent shrink-0" />
+                  <span>
+                    {eventDate.toLocaleTimeString('en-US', {
+                      hour: 'numeric',
+                      minute: '2-digit',
+                    })}
+                  </span>
+                </div>
+                <div className="flex items-center gap-2">
+                  <MapPin className="w-4 h-4 text-accent shrink-0" />
+                  <span>Binghamton University &middot; Watson College</span>
+                </div>
+              </div>
+            )}
           </div>
 
-          {eventDate && !isNaN(eventDate.getTime()) && (
-            <div className="space-y-2 py-3 border-y border-white/[0.08] text-sm text-secondary">
-              <div className="flex items-center gap-2">
-                <CalendarIcon className="w-4 h-4 text-accent" />
-                <span>
-                  {eventDate.toLocaleDateString('en-US', {
-                    weekday: 'long',
-                    month: 'long',
-                    day: 'numeric',
-                    year: 'numeric',
-                  })}
-                </span>
-              </div>
-              <div className="flex items-center gap-2">
-                <Clock className="w-4 h-4 text-accent" />
-                <span>
-                  {eventDate.toLocaleTimeString('en-US', {
-                    hour: 'numeric',
-                    minute: '2-digit',
-                  })}
-                </span>
-              </div>
-              <div className="flex items-center gap-2">
-                <MapPin className="w-4 h-4 text-accent" />
-                <span>Binghamton University &middot; Watson College</span>
-              </div>
-            </div>
-          )}
+          {/* Middle section: Description with dedicated internal scrollbar if text is long */}
+          <div className="flex-1 min-h-0 overflow-y-auto pr-2 my-2 space-y-2 focus:outline-none">
+            <p className="text-secondary leading-relaxed text-sm whitespace-pre-line">
+              {event.description || "Join StackHacks for an interactive coding and networking session."}
+            </p>
+          </div>
 
-          <p className="text-secondary leading-relaxed text-sm">
-            {event.description || "Join StackHacks for an interactive coding and networking session."}
-          </p>
-
-          <div className="pt-2">
+          {/* Bottom section: RSVP action (pinned) */}
+          <div className="shrink-0 pt-3 border-t border-white/[0.08]">
             <a
               href="https://www.instagram.com/stackhacksbu/?hl=en"
               target="_blank"
@@ -107,16 +118,18 @@ function EventDetailModal({ event, onClose }) {
           </div>
         </div>
 
+        {/* Close Button */}
         <button
           onClick={onClose}
           type="button"
           aria-label="Close dialog"
-          className="absolute top-4 right-4 w-8 h-8 flex items-center justify-center rounded-full border border-white/15 bg-black/60 backdrop-blur-md text-secondary hover:text-white hover:border-white/30 transition-all duration-150 cursor-pointer"
+          className="absolute top-3 right-3 z-30 w-8 h-8 flex items-center justify-center rounded-full border border-white/15 bg-black/60 backdrop-blur-md text-secondary hover:text-white hover:border-white/30 transition-all duration-150 cursor-pointer"
         >
           <X className="w-4 h-4" />
         </button>
       </motion.div>
-    </motion.div>
+    </motion.div>,
+    document.body
   )
 }
 
@@ -322,6 +335,8 @@ const Events = () => {
               const hasEvents = dayEvents.length > 0
               const isSelected = selectedDate === dateKey
 
+              const eventWithImage = dayEvents.find(e => Boolean(e.image))
+
               // Check if today
               const isToday =
                 now.getFullYear() === year &&
@@ -339,22 +354,42 @@ const Events = () => {
                       setSelectedDate(null)
                     }
                   }}
-                  className={`aspect-square relative rounded-xl sm:rounded-2xl flex flex-col items-center justify-center transition-all duration-200 p-1 group cursor-pointer ${
+                  className={`aspect-square relative rounded-xl sm:rounded-2xl flex flex-col items-center justify-center transition-all duration-200 p-1 group cursor-pointer overflow-hidden ${
                     isSelected
-                      ? 'border-2 border-accent bg-accent/15 shadow-[0_0_16px_rgba(254,178,58,0.3)]'
+                      ? 'border-2 border-accent bg-accent/20 shadow-[0_0_20px_rgba(254,178,58,0.4)] ring-2 ring-accent/40'
                       : isToday
-                      ? 'border-2 border-accent/60 bg-white/[0.04]'
+                      ? 'border-2 border-accent/70 bg-white/[0.04]'
                       : hasEvents
-                      ? 'bg-white/[0.06] border border-accent/40 hover:border-accent hover:bg-white/[0.1]'
+                      ? 'border border-accent/40 hover:border-accent shadow-[0_0_12px_rgba(254,178,58,0.15)]'
                       : 'bg-white/[0.02] border border-white/5 hover:border-white/20 hover:bg-white/[0.04]'
                   }`}
                 >
+                  {/* Full-square thumbnail when an event on this day has an image */}
+                  {eventWithImage && (
+                    <>
+                      <img
+                        src={eventWithImage.image}
+                        alt=""
+                        className="absolute inset-0 w-full h-full object-cover transition-transform duration-500 group-hover:scale-110"
+                      />
+                      {/* Dark overlay for readability */}
+                      <div
+                        className={`absolute inset-0 transition-colors duration-200 ${
+                          isSelected
+                            ? 'bg-black/40'
+                            : 'bg-black/60 group-hover:bg-black/40'
+                        }`}
+                      />
+                    </>
+                  )}
+
+                  {/* Day Number */}
                   <span
-                    className={`text-sm sm:text-base font-semibold ${
+                    className={`relative z-10 text-sm sm:text-base font-bold transition-colors ${
                       isSelected
-                        ? 'text-accent'
+                        ? 'text-accent drop-shadow-[0_2px_4px_rgba(0,0,0,0.9)]'
                         : hasEvents
-                        ? 'text-accent'
+                        ? 'text-white drop-shadow-[0_2px_4px_rgba(0,0,0,0.95)] group-hover:text-accent'
                         : isToday
                         ? 'text-primary'
                         : 'text-secondary/80 group-hover:text-primary'
@@ -363,20 +398,10 @@ const Events = () => {
                     {dayNum}
                   </span>
 
-                  {/* Event Thumbnail or Indicator Badge matching attached image */}
+                  {/* Indicator badge */}
                   {hasEvents && (
-                    <div className="absolute bottom-1.5 flex items-center justify-center gap-1">
-                      {dayEvents[0].image ? (
-                        <div className="w-2.5 h-2.5 sm:w-3 sm:h-3 rounded-full overflow-hidden border border-accent">
-                          <img
-                            src={dayEvents[0].image}
-                            alt=""
-                            className="w-full h-full object-cover"
-                          />
-                        </div>
-                      ) : (
-                        <span className="w-1.5 h-1.5 rounded-full bg-accent animate-pulse" />
-                      )}
+                    <div className="relative z-10 mt-1 flex items-center justify-center">
+                      <span className="w-1.5 h-1.5 rounded-full bg-accent shadow-[0_0_8px_rgba(254,178,58,0.9)]" />
                     </div>
                   )}
                 </button>
@@ -439,8 +464,8 @@ const Events = () => {
             </button>
           </div>
 
-          {/* Event Cards List */}
-          <div className="space-y-4">
+          {/* Event Cards List (Scrollable to keep page height balanced) */}
+          <div className="space-y-4 max-h-[580px] overflow-y-auto pr-1.5 focus:outline-none">
             {loading ? (
               <div className="tech-card p-10 text-center text-secondary/50">
                 Loading events...
