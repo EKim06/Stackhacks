@@ -1,14 +1,14 @@
-import React, { useEffect, useState } from 'react';
-import ProjectCard from '../components/ProjectCard';
-import { client } from '../sanityClient';
+import React, { useEffect, useState } from 'react'
+import ProjectCard from '../components/ProjectCard'
+import { client } from '../sanityClient'
+import { motion } from 'framer-motion'
 
 const Projects = () => {
-  const [events, setEvents] = useState([]);
-  const [loading, setLoading] = useState(true);
+  const [projects, setProjects] = useState([])
+  const [loading, setLoading] = useState(true)
 
-  // FETCH EVENTS
   useEffect(() => {
-    const fetchEvents = async () => {
+    const fetchProjects = async () => {
       try {
         const query = `*[_type == "project"] | order(_createdAt asc) {
           _id,
@@ -17,58 +17,75 @@ const Projects = () => {
           description,
           "image": image.asset->url,
           sections
-        }`;
+        }`
 
-        const data = await client.fetch(query);
-        setEvents(data);
+        const data = await client.fetch(query)
+        setProjects(data || [])
       } catch (e) {
-        console.error("Failed to fetch events from Sanity: ", e);
+        console.error("Failed to fetch projects from Sanity: ", e)
       } finally {
-        setLoading(false);
+        setLoading(false)
       }
-    };
+    }
 
-    fetchEvents();
-  }, []);
+    fetchProjects()
+  }, [])
 
   return (
-    <div>
-      <h1 className='text-center py-5 text-4xl font-bold text-primary uppercase tracking-wider'>Projects</h1>
+    <div className="w-full max-w-6xl mx-auto px-6 py-12">
+      {/* Page Header with Woosh-in */}
+      <motion.div
+        initial={{ opacity: 0, y: 20 }}
+        whileInView={{ opacity: 1, y: 0 }}
+        viewport={{ once: true }}
+        transition={{ duration: 0.5 }}
+        className="text-center max-w-2xl mx-auto mb-16 space-y-3"
+      >
+        <p className="text-xs sm:text-sm font-semibold tracking-wider uppercase text-accent">
+          Showcase
+        </p>
+        <h1 className="text-4xl sm:text-5xl font-semibold tracking-tight text-primary">
+          Member Projects
+        </h1>
+        <p className="text-secondary text-base leading-relaxed">
+          Real-world applications, tools, and platforms engineered by StackHacks project teams throughout the academic year.
+        </p>
+      </motion.div>
       
-      {/* --- PROJECTS LIST --- */}
-      <div className='grid grid-cols-1 md:grid-cols-2 xl:grid-cols-4 max-w-5xl mx-auto gap-6 px-4 pb-20'>
-
+      {/* Projects Grid */}
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 pb-20">
         {loading ? ( 
-            /* IF LOADING */
-            <div className="text-center text-secondary/50 py-10"> Loading Projects... </div>
-        ) : events.length > 0 ? (
-          
-          /* IF DONE LOADING, AND PROJECTS EXIST */
-          events.map((event, index) => (
-            <div key={event._id || index} className="relative group/wrapper">
-              {/* The Actual Card Component */}
-              <ProjectCard 
-                title={event.title} 
-                date={event.date} 
-                image={event.image}
-                index={index}
-              > 
-                <p>{event.description}</p>
-                {event.sections.map((section, i) => (
-                <div key={i}>
-                  <h4>{section.heading}</h4>
-                  <p>{section.body}</p>
-                </div> ))}
-              </ProjectCard>
-            </div> 
+          <div className="col-span-full text-center text-secondary/50 py-16">
+            Loading projects...
+          </div>
+        ) : projects.length > 0 ? (
+          projects.map((project, index) => (
+            <ProjectCard 
+              key={project._id || index}
+              title={project.title} 
+              date={project.date} 
+              image={project.image}
+              index={index}
+            > 
+              {project.description && (
+                <p className="text-secondary leading-relaxed">{project.description}</p>
+              )}
+              {project.sections?.map((section, i) => (
+                <div key={i} className="space-y-1 pt-2">
+                  <h4 className="font-semibold text-primary text-base">{section.heading}</h4>
+                  <p className="text-secondary text-sm leading-relaxed">{section.body}</p>
+                </div>
+              ))}
+            </ProjectCard>
           ))
         ) : (
-          /* IF DONE LOADING, AND NO PROJECTS */
-          <div className="text-center text-secondary/50 py-10"> No projects found. Please try again. </div>
+          <div className="col-span-full text-center text-secondary/50 py-16 border border-white/5 rounded-2xl bg-white/[0.01]">
+            No projects found. Check back soon for new project releases!
+          </div>
         )}
       </div>
     </div>
-  );
+  )
 }
 
-export default Projects;
+export default Projects

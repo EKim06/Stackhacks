@@ -1,185 +1,159 @@
-import {useState, useRef, useEffect, useId} from "react";
-import { AnimatePresence, motion } from "framer-motion";
-import { Calendar } from "lucide-react";
+import { useState, useRef, useEffect } from "react"
+import { AnimatePresence, motion } from "framer-motion"
+import { X, ArrowUpRight, Code2 } from "lucide-react"
 
 const ProjectCard = ({ title, date, image, children, className, index = 0 }) => {
-  const [active, setActive] = useState(false);
-  const cardRef = useRef(null);
-  const id = useId();
+  const [active, setActive] = useState(false)
+  const cardRef = useRef(null)
 
   useEffect(() => {
     const onKeyDown = (e) => {
-      if (e.key === "Escape") setActive(false);
-    };
+      if (e.key === "Escape") setActive(false)
+    }
     const handleClickOutside = (e) => {
-      if (cardRef.current && !cardRef.current.contains(e.target)) setActive(false);
-    };
+      if (cardRef.current && !cardRef.current.contains(e.target)) setActive(false)
+    }
 
-    window.addEventListener("keydown", onKeyDown);
-    document.addEventListener("mousedown", handleClickOutside);
-    document.addEventListener("touchstart", handleClickOutside);
+    if (active) {
+      document.body.style.overflow = "hidden"
+      window.addEventListener("keydown", onKeyDown)
+      document.addEventListener("mousedown", handleClickOutside)
+    }
 
     return () => {
-      window.removeEventListener("keydown", onKeyDown);
-      document.removeEventListener("mousedown", handleClickOutside);
-      document.removeEventListener("touchstart", handleClickOutside);
-    };
-  }, []);
+      document.body.style.overflow = ""
+      window.removeEventListener("keydown", onKeyDown)
+      document.removeEventListener("mousedown", handleClickOutside)
+    }
+  }, [active])
 
   return (
     <>
-      {/* Backdrop */}
+      {/* Collapsed Card */}
+      <motion.div
+        initial={{ opacity: 0, y: 24 }}
+        whileInView={{ opacity: 1, y: 0 }}
+        viewport={{ once: true }}
+        transition={{ duration: 0.45, delay: index * 0.06 }}
+        className="group h-full"
+      >
+        <div
+          onClick={() => setActive(true)}
+          className={`tech-card flex flex-col h-full overflow-hidden cursor-pointer hover:border-accent/50 hover:shadow-[0_8px_32px_rgba(0,0,0,0.5)] transition-all duration-300 ${className || ""}`}
+        >
+          {/* Cover Image */}
+          <div className="relative h-48 sm:h-52 w-full overflow-hidden bg-white/[0.02]">
+            {image ? (
+              <img
+                src={image}
+                alt={title}
+                className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
+              />
+            ) : (
+              <div className="w-full h-full bg-gradient-to-br from-accent/20 via-[#1a1a1c] to-background flex items-center justify-center">
+                <Code2 className="w-12 h-12 text-accent/40" />
+              </div>
+            )}
+            <div className="absolute inset-0 bg-gradient-to-t from-[#0d0d0e] via-black/20 to-transparent" />
+            
+            {/* Quick Open Indicator Badge */}
+            <div className="absolute bottom-3 right-3">
+              <span className="w-8 h-8 rounded-full border border-white/15 bg-black/60 backdrop-blur-md flex items-center justify-center text-secondary group-hover:text-accent group-hover:border-accent/50 transition-colors">
+                <ArrowUpRight className="w-4 h-4" />
+              </span>
+            </div>
+          </div>
+
+          {/* Card Body */}
+          <div className="p-5 flex flex-col flex-grow justify-between space-y-3">
+            <div className="space-y-1.5">
+              {date && (
+                <p className="text-xs font-semibold text-accent uppercase tracking-wider">
+                  {date}
+                </p>
+              )}
+              <h3 className="text-lg font-semibold text-primary group-hover:text-accent transition-colors leading-snug">
+                {title}
+              </h3>
+            </div>
+
+            <div className="pt-2 text-xs text-secondary/70 flex items-center justify-between border-t border-white/[0.06]">
+              <span>Click to view details</span>
+              <span className="text-accent group-hover:translate-x-1 transition-transform">&rarr;</span>
+            </div>
+          </div>
+        </div>
+      </motion.div>
+
+      {/* Expanded Modal (Using hardware-accelerated GPU opacity & scale — NO layoutId lag or scrollbar jitter) */}
       <AnimatePresence>
         {active && (
           <motion.div
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
-            className="fixed inset-0 bg-black/60 backdrop-blur-md h-full w-full z-10"
-          />
-        )}
-      </AnimatePresence>
-
-      {/* Expanded Modal */}
-      <AnimatePresence>
-        {active && (
-          <div className="fixed inset-0 grid place-items-center z-[100] sm:mt-16">
+            transition={{ duration: 0.2 }}
+            className="fixed inset-0 z-50 flex items-center justify-center p-4 sm:p-6 bg-black/75 backdrop-blur-md"
+            onClick={() => setActive(false)}
+          >
             <motion.div
-              layoutId={`card-${title}-${id}`}
               ref={cardRef}
-              className="w-full max-w-[850px] h-full flex flex-col overflow-auto [scrollbar-width:none] sm:rounded-t-3xl bg-primary/5 backdrop-blur-sm border border-primary/10 relative"
+              initial={{ opacity: 0, scale: 0.94, y: 16 }}
+              animate={{ opacity: 1, scale: 1, y: 0 }}
+              exit={{ opacity: 0, scale: 0.94, y: 16 }}
+              transition={{ duration: 0.25, ease: [0.16, 1, 0.3, 1] }}
+              onClick={(e) => e.stopPropagation()}
+              className="relative w-full max-w-2xl max-h-[85vh] flex flex-col rounded-2xl bg-[#141416] border border-white/15 shadow-2xl overflow-hidden"
             >
-              {/* Expanded Image */}
-              <motion.div layoutId={`image-${title}-${id}`}>
-                <div className="relative before:absolute before:inset-x-0 before:bottom-[-1px] before:h-[70px] before:z-50 before:bg-gradient-to-t before:from-black/30">
-                  {image ? (
-                    <img
-                      src={image}
-                      alt={title}
-                      className="w-full h-80 object-cover object-center"
-                    />
-                  ) : (
-                    <div className="w-full h-80 bg-gradient-to-br from-accent/30 to-black flex items-center justify-center">
-                      <Calendar className="w-16 h-16 text-accent/50" />
-                    </div>
-                  )}
-                </div>
-              </motion.div>
-
-              {/* Expanded Content */}
-              <div className="p-8">
-                <div className="flex justify-between items-start mb-4">
-                  <div>
-                    <motion.p
-                      layoutId={`date-${date}-${id}`}
-                      className="text-secondary text-sm mb-1"
-                    >
-                      {date}
-                    </motion.p>
-                    <motion.h3
-                      layoutId={`title-${title}-${id}`}
-                      className="text-4xl font-bold text-primary"
-                    >
-                      {title}
-                    </motion.h3>
+              {/* Cover Image */}
+              <div className="relative h-60 sm:h-72 w-full overflow-hidden shrink-0 bg-white/[0.02]">
+                {image ? (
+                  <img
+                    src={image}
+                    alt={title}
+                    className="w-full h-full object-cover"
+                  />
+                ) : (
+                  <div className="w-full h-full bg-gradient-to-br from-accent/20 via-[#1a1a1c] to-background flex items-center justify-center">
+                    <Code2 className="w-16 h-16 text-accent/50" />
                   </div>
+                )}
+                <div className="absolute inset-0 bg-gradient-to-t from-[#141416] via-transparent to-transparent" />
 
-                  {/* Close Button */}
-                  <motion.button
-                    aria-label="Close card"
-                    layoutId={`button-${title}-${id}`}
-                    onClick={() => setActive(false)}
-                    className="h-10 w-10 shrink-0 flex items-center justify-center rounded-full border border-primary/20 text-primary hover:border-accent/50 hover:text-accent transition-colors duration-300 focus:outline-none"
-                  >
-                    <motion.div animate={{ rotate: active ? 45 : 0 }} transition={{ duration: 0.4 }}>
-                      <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                        <path d="M5 12h14" />
-                        <path d="M12 5v14" />
-                      </svg>
-                    </motion.div>
-                  </motion.button>
+                {/* Close Button */}
+                <button
+                  type="button"
+                  aria-label="Close dialog"
+                  onClick={() => setActive(false)}
+                  className="absolute top-4 right-4 h-8 w-8 flex items-center justify-center rounded-full border border-white/15 bg-black/60 backdrop-blur-md text-secondary hover:text-white hover:border-white/30 transition-all duration-150 cursor-pointer z-20"
+                >
+                  <X className="w-4 h-4" />
+                </button>
+              </div>
+
+              {/* Modal Content with Custom Scrollbar */}
+              <div className="p-6 sm:p-8 space-y-5 overflow-y-auto">
+                <div className="space-y-1.5 border-b border-white/[0.08] pb-4">
+                  {date && (
+                    <p className="text-xs font-semibold text-accent uppercase tracking-wider">
+                      {date}
+                    </p>
+                  )}
+                  <h2 className="text-2xl sm:text-3xl font-semibold text-primary tracking-tight">
+                    {title}
+                  </h2>
                 </div>
 
-                <motion.div
-                  layout
-                  initial={{ opacity: 0 }}
-                  animate={{ opacity: 1 }}
-                  exit={{ opacity: 0 }}
-                  className="text-secondary text-sm flex flex-col gap-4 pb-10 [&_h4]:text-primary"
-                >
+                <div className="text-secondary text-sm sm:text-base leading-relaxed space-y-4 [&_h4]:text-primary [&_h4]:font-semibold [&_h4]:text-base [&_h4]:mt-4">
                   {children}
-                </motion.div>
+                </div>
               </div>
             </motion.div>
-          </div>
+          </motion.div>
         )}
       </AnimatePresence>
-
-      {/* Collapsed Card */}
-      <motion.div
-        initial={{ opacity: 0, y: 30 }}
-        whileInView={{ opacity: 1, y: 0 }}
-        viewport={{ once: true }}
-        transition={{ duration: 0.5, delay: index * 0.1 }}
-        className="group"
-      >
-        <motion.div
-          layoutId={`card-${title}-${id}`}
-          onClick={() => setActive(true)}
-          className={`bg-primary/5 backdrop-blur-sm rounded-2xl overflow-hidden border border-primary/10 hover:border-accent/50 transition-all duration-500 cursor-pointer ${className || ""}`}
-        >
-          {/* Image */}
-          <motion.div layoutId={`image-${title}-${id}`} className="relative h-48 overflow-hidden">
-            {image ? (
-              <img
-                src={image}
-                alt={title}
-                className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110"
-              />
-            ) : (
-              <div className="w-full h-full bg-gradient-to-br from-accent/30 to-black flex items-center justify-center">
-                <Calendar className="w-16 h-16 text-accent/50" />
-              </div>
-            )}
-          </motion.div>
-
-          {/* Content */}
-          <div className="p-6">
-            <div className="flex justify-between items-start">
-              <div>
-                <motion.h3
-                  layoutId={`title-${title}-${id}`}
-                  className="text-xl font-bold mb-3 text-primary group-hover:text-accent transition-colors"
-                >
-                  {title}
-                </motion.h3>
-                <motion.p
-                  layoutId={`date-${date}-${id}`}
-                  className="text-secondary text-sm"
-                >
-                  {date}
-                </motion.p>
-              </div>
-
-              {/* Open Button */}
-              <motion.button
-                aria-label="Open card"
-                layoutId={`button-${title}-${id}`}
-                className="h-8 w-8 shrink-0 flex items-center justify-center rounded-full border border-primary/20 text-primary hover:border-accent/50 hover:text-accent transition-colors duration-300 focus:outline-none"
-              >
-                <motion.div animate={{ rotate: active ? 45 : 0 }} transition={{ duration: 0.4 }}>
-                  <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                    <path d="M5 12h14" />
-                    <path d="M12 5v14" />
-                  </svg>
-                </motion.div>
-              </motion.button>
-            </div>
-          </div>
-        </motion.div>
-      </motion.div>
     </>
-  );
-};
+  )
+}
 
-export default ProjectCard;
+export default ProjectCard

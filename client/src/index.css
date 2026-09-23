@@ -4,101 +4,124 @@
 
 /* Design tokens */
 @theme {
-  --color-primary: #f2f0ef; /* White */
-  --color-secondary: #a2a2a2; /* Light Gray */
-  --color-tertiary: #2a2a2a; /* Dark Gray */
-  --color-accent: #feb23a; /* Gold */
-  --color-background: #111111;
-  --font-main: 'Inter', sans-serif;
-  /* shadcn-style aliases for ui components */
+  --color-primary: #f2f0ef;
+  --color-secondary: #a2a2a2;
+  --color-tertiary: #1e1e1e;
+  --color-accent: #feb23a;
+  --color-accent-hover: #f5a623;
+  --color-background: #0d0d0e;
+  --color-card: #141416;
+  --color-border: rgba(255, 255, 255, 0.1);
   --color-foreground: #f2f0ef;
   --color-muted-foreground: #a2a2a2;
-  --color-border: #2a2a2a;
+  
+  --font-main: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
 }
 
 @layer base {
-  body {
-    @apply font-main text-primary bg-background;
+  * {
+    border-color: var(--color-border);
   }
 
-  h1 { @apply text-5xl font-bold; }
-  h2 { @apply text-4xl font-semibold; }
-  h3 { @apply text-3xl font-semibold; }
+  html {
+    overflow-x: hidden;
+    scrollbar-color: #26262a #0d0d0e;
+    scrollbar-width: thin;
+  }
+
+  body {
+    @apply font-main text-primary bg-background antialiased selection:bg-accent/30 selection:text-white;
+    min-height: 100vh;
+    overflow-x: hidden;
+  }
+
+  /* Custom Dark Scrollbar for entire site */
+  ::-webkit-scrollbar {
+    width: 8px;
+    height: 8px;
+  }
+
+  ::-webkit-scrollbar-track {
+    background: #0d0d0e;
+  }
+
+  ::-webkit-scrollbar-thumb {
+    background: #26262a;
+    border-radius: 4px;
+    border: 2px solid #0d0d0e;
+  }
+
+  ::-webkit-scrollbar-thumb:hover {
+    background: #38383e;
+  }
+
+  h1 { @apply text-4xl sm:text-5xl lg:text-6xl font-semibold tracking-tight text-primary; }
+  h2 { @apply text-3xl sm:text-4xl font-semibold tracking-tight text-primary; }
+  h3 { @apply text-xl sm:text-2xl font-semibold tracking-tight text-primary; }
 
   p {
-    @apply text-base leading-relaxed;
+    @apply text-base text-secondary leading-relaxed;
   }
-
-  a {
-    @apply transition duration-300 ease-out hover:brightness-200 text-sm p-1;
-  }
-
 }
 
-  @layer components {
-    .btn-primary {
-      @apply inline-flex items-center justify-center
-            px-4 py-2 rounded-lg text-sm m-2
-            font-medium cursor-pointer bg-accent text-black transition duration-300 ease-out hover:brightness-80;
-    }
-
-    .btn-secondary {
-      @apply inline-flex items-center justify-center
-            px-4 py-2 rounded-lg text-sm m-2 text-secondary
-            font-medium cursor-pointer border border-secondary text-black transition duration-300 ease-out hover:brightness-200;
-    }
-
-    .input {
-      @apply border border-2 border-tertiary rounded px-2 py-1 text-xl bg-transparent hover:border-secondary;
-    }
-
-    .custom-date::-webkit-calendar-picker-indicator {
-      background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="16" height="15" viewBox="0 0 24 24"><path fill="%23ffffff" d="M20 3h-1V1h-2v2H7V1H5v2H4c-1.1 0-2 .9-2 2v16c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm0 18H4V8h16v13z"/></svg>');
-      cursor: pointer;
-    }
-
-    .slick-slide .card {
-      transform: scale(0.8);
-      opacity: 0.6;
-      transition: all 0.3s ease;
-    }
-
-  .eboard-slider .slick-list {
-    overflow: visible !important;
+@layer components {
+  /* Minimal Modern Tech Button Tokens */
+  .btn-primary {
+    @apply inline-flex items-center justify-center gap-2 px-5 py-2.5 rounded-xl text-sm
+           font-medium cursor-pointer bg-accent text-black transition-all duration-200
+           hover:bg-[#ffbe4a] hover:shadow-[0_0_24px_rgba(254,178,58,0.3)]
+           active:scale-[0.98] disabled:opacity-50 disabled:pointer-events-none;
   }
 
-  .eboard-slider .slick-prev,
-  .slick-next { 
-    z-index: 50;
+  .btn-secondary {
+    @apply inline-flex items-center justify-center gap-2 px-5 py-2.5 rounded-xl text-sm
+           font-medium cursor-pointer border border-white/15 bg-white/[0.03] text-primary
+           transition-all duration-200 hover:border-white/30 hover:bg-white/[0.07]
+           active:scale-[0.98] disabled:opacity-50 disabled:pointer-events-none;
   }
 
-  .slick-center .card {
-    transform: scale(1.1);
-    opacity: 1;
+  .btn-ghost {
+    @apply inline-flex items-center justify-center gap-2 px-4 py-2 rounded-xl text-sm
+           font-medium cursor-pointer text-secondary transition-all duration-200
+           hover:text-primary hover:bg-white/[0.05] disabled:opacity-50;
   }
-  .swiper {
-    --swiper-navigation-color: var(--color-accent);
-    --swiper-pagination-color: var(--color-accent);
-    --swiper-navigation-size: 30px;
-    .slick-center .card {
-      transform: scale(1);
-      opacity: 1;
-    }
-    .swiper {
-      --swiper-navigation-color: var(--color-accent);
-      --swiper-pagination-color: var(--color-accent);
-      --swiper-navigation-size: 30px;
 
-      padding-bottom: 40px !important;
-    }
-
-    .swiper-pagination-bullet {
-      background-color: var(--color-secondary) !important;
-      opacity: 1 !important;
-    }
-
-    .swiper-pagination-bullet-active {
-      background-color: var(--color-accent) !important;
-    } 
+  /* Sleek Text Box / Input Tokens */
+  .input {
+    @apply w-full bg-white/[0.03] border border-white/10 rounded-xl px-4 py-3 text-sm text-primary
+           placeholder:text-secondary/40 focus:border-accent focus:bg-white/[0.06]
+           focus:outline-none focus:ring-1 focus:ring-accent/30 transition-all duration-200;
   }
+
+  /* Architectural Card Token */
+  .tech-card {
+    @apply rounded-2xl border border-white/10 bg-white/[0.02] backdrop-blur-sm
+           transition-all duration-300 hover:border-white/20;
+  }
+
+  /* Custom Calendar Picker Indicator */
+  .custom-date::-webkit-calendar-picker-indicator {
+    background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="16" height="15" viewBox="0 0 24 24"><path fill="%23ffffff" d="M20 3h-1V1h-2v2H7V1H5v2H4c-1.1 0-2 .9-2 2v16c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm0 18H4V8h16v13z"/></svg>');
+    cursor: pointer;
+  }
+}
+
+/* Swiper Carousel Modern Overrides */
+.swiper {
+  --swiper-navigation-color: var(--color-accent);
+  --swiper-pagination-color: var(--color-accent);
+  padding-bottom: 40px !important;
+}
+
+.swiper-pagination-bullet {
+  background-color: var(--color-secondary) !important;
+  opacity: 0.35 !important;
+  transition: all 0.2s ease;
+}
+
+.swiper-pagination-bullet-active {
+  background-color: var(--color-accent) !important;
+  opacity: 1 !important;
+  width: 20px !important;
+  border-radius: 4px !important;
 }

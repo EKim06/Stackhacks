@@ -1,78 +1,90 @@
-import React from 'react';
-import { motion } from 'framer-motion';
-import { Calendar } from 'lucide-react';
+import React from 'react'
+import { motion } from 'framer-motion'
+import { Calendar, Clock } from 'lucide-react'
 
 const EventCard = ({ title, date, image, children, className, index = 0 }) => {
-  // Check if date is in the past
-  const isPast = date ? new Date(date) < new Date() : false;
+  const eventDate = date ? new Date(date) : null
+  const isPast = eventDate ? eventDate < new Date() : false
   
   return (
     <motion.div
-      initial={{ opacity: 0, y: 30 }}
+      initial={{ opacity: 0, y: 24 }}
       whileInView={{ opacity: 1, y: 0 }}
       viewport={{ once: true }}
-      transition={{ duration: 0.5, delay: index * 0.1 }}
-      className="group"
+      transition={{ duration: 0.45, delay: index * 0.08 }}
+      className="group h-full"
     >
-      <div className={`bg-white/5 backdrop-blur-sm rounded-2xl overflow-hidden border border-white/10 hover:border-accent/50 transition-all duration-500 ${isPast ? 'opacity-70' : ''} ${className || ''}`}>
-        {/* Image */}
-        <div className="relative h-48 overflow-hidden">
+      <div className={`tech-card flex flex-col h-full overflow-hidden hover:border-accent/40 hover:shadow-[0_8px_32px_rgba(0,0,0,0.4)] ${isPast ? 'opacity-75 hover:opacity-100' : ''} ${className || ''}`}>
+        {/* Cover Image */}
+        <div className="relative h-48 sm:h-52 w-full overflow-hidden bg-white/[0.02]">
           {image ? (
             <img
               src={image}
               alt={title}
-              className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110"
+              className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105"
             />
           ) : (
-            <div className="w-full h-full bg-gradient-to-br from-accent/30 to-black flex items-center justify-center">
-              <Calendar className="w-16 h-16 text-accent/50" />
+            <div className="w-full h-full bg-gradient-to-br from-accent/20 via-[#1a1a1c] to-background flex items-center justify-center">
+              <Calendar className="w-12 h-12 text-accent/40" />
             </div>
           )}
-          <div className="absolute inset-0 bg-gradient-to-t from-black via-black/30 to-transparent" />
+          <div className="absolute inset-0 bg-gradient-to-t from-[#0d0d0e] via-black/20 to-transparent" />
           
-          {/* Date Badge */}
-          {date && (
-            <div className="absolute bottom-4 left-4 bg-black/80 backdrop-blur-sm rounded-xl px-4 py-2 border border-white/10">
-              <div className="text-2xl font-bold text-accent">
-                {new Date(date).getDate()}
+          {/* Calendar Badge */}
+          {eventDate && !isNaN(eventDate.getTime()) && (
+            <div className="absolute bottom-3 left-4 bg-[#141416]/90 backdrop-blur-md rounded-xl px-3 py-1.5 border border-white/10 shadow-lg flex items-center gap-2.5">
+              <div className="text-xl font-bold font-mono text-accent leading-none">
+                {eventDate.getDate()}
               </div>
-              <div className="text-xs text-white/60 uppercase tracking-wider">
-                {new Date(date).toLocaleDateString('en-US', { month: 'short', year: 'numeric' })}
+              <div className="text-[10px] font-mono text-secondary uppercase tracking-wider leading-tight">
+                <div>{eventDate.toLocaleDateString('en-US', { month: 'short' })}</div>
+                <div className="text-white/40">{eventDate.getFullYear()}</div>
               </div>
             </div>
           )}
+
+          {/* Status Tag */}
+          <div className="absolute top-3 right-3">
+            {isPast ? (
+              <span className="px-2.5 py-0.5 rounded-full border border-white/10 bg-black/60 backdrop-blur-md text-[10px] font-mono uppercase tracking-wider text-secondary/70">
+                Completed
+              </span>
+            ) : (
+              <span className="px-2.5 py-0.5 rounded-full border border-accent/40 bg-accent/20 backdrop-blur-md text-[10px] font-mono uppercase tracking-wider text-accent font-semibold">
+                Upcoming
+              </span>
+            )}
+          </div>
         </div>
 
-        {/* Content */}
-        <div className="p-6">
-          <h3 className="text-xl font-bold mb-3 text-white group-hover:text-accent transition-colors">
-            {title}
-          </h3>
-          
-          {date && (
-            <div className="flex items-center gap-2 text-sm text-white/50 mb-4">
-              <Calendar className="w-4 h-4 text-accent" />
-              <span>
-                {new Date(date).toLocaleDateString('en-US', { 
-                  weekday: 'long', 
-                  hour: 'numeric', 
-                  minute: '2-digit' 
-                })}
-              </span>
+        {/* Content Body */}
+        <div className="p-6 flex flex-col flex-grow justify-between space-y-4">
+          <div className="space-y-2.5">
+            <h3 className="text-xl font-semibold text-primary group-hover:text-accent transition-colors leading-snug">
+              {title}
+            </h3>
+            
+            {eventDate && !isNaN(eventDate.getTime()) && (
+              <div className="flex items-center gap-1.5 text-xs font-mono text-secondary/80">
+                <Clock className="w-3.5 h-3.5 text-accent/80" />
+                <span>
+                  {eventDate.toLocaleDateString('en-US', { 
+                    weekday: 'short', 
+                    hour: 'numeric', 
+                    minute: '2-digit' 
+                  })}
+                </span>
+              </div>
+            )}
+            
+            <div className="text-secondary text-sm leading-relaxed line-clamp-3">
+              {children}
             </div>
-          )}
-          
-          <div className="text-secondary text-sm">
-            {children}
           </div>
-          
-          {isPast && (
-            <span className="text-secondary/50 text-sm mt-4 block">Event has ended</span>
-          )}
         </div>
       </div>
     </motion.div>
-  );
-};
+  )
+}
 
-export default EventCard;
+export default EventCard

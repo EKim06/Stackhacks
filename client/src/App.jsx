@@ -1,4 +1,3 @@
-import { useState } from 'react'
 import { Routes, Route } from 'react-router-dom'
 import Navbar from './components/Navbar'
 import ScrollToTop from './components/ScrollToTop'
@@ -9,16 +8,15 @@ import About from './pages/About'
 import Eboard from './pages/Eboard'
 import Events from './pages/Events'
 import Contact from './pages/Contact'
-
+import SanityRedirect from './pages/SanityRedirect'
 
 function App() {
-
   return (
-    <div className="min-h-screen flex flex-col">
+    <div className="min-h-screen flex flex-col bg-background text-primary selection:bg-accent/30 selection:text-white">
       <ScrollToTop />
       <Navbar />
 
-      <div className="relative z-0 flex-grow pt-16">
+      <main className="relative z-0 flex-grow pt-16">
         <Routes>
           <Route path="/" element={<Home />} />
           <Route path="/projects" element={<Projects />} />
@@ -26,8 +24,10 @@ function App() {
           <Route path="/eboard" element={<Eboard />} />
           <Route path="/events" element={<Events />} />
           <Route path="/contact" element={<Contact />} />
+          <Route path="/sanity" element={<SanityRedirect />} />
+          <Route path="/studio" element={<SanityRedirect />} />
         </Routes>
-      </div>
+      </main>
 
       <Footer />
     </div>

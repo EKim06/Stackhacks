@@ -6,36 +6,32 @@ function cn(...parts) {
 
 const variants = {
   primary:
-    'bg-accent text-black border border-accent hover:brightness-90 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent',
+    'bg-accent text-black border border-accent hover:bg-[#ffbe4a] hover:shadow-[0_0_24px_rgba(254,178,58,0.3)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent/50 active:scale-[0.98]',
   secondary:
-    'border border-secondary text-secondary bg-transparent hover:brightness-125',
-  ghost: 'bg-transparent text-primary hover:bg-white/5',
+    'border border-white/15 bg-white/[0.03] text-primary hover:border-white/30 hover:bg-white/[0.07] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white/20 active:scale-[0.98]',
+  ghost:
+    'bg-transparent text-secondary hover:text-primary hover:bg-white/[0.05] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white/20 active:scale-[0.98]',
 }
 
-const Button = React.forwardRef(
-  ({ className = '', children, variant = 'primary', asChild = false, ...props }, ref) => {
-    const classes = cn(
-      'inline-flex items-center justify-center rounded-lg px-4 py-2 text-sm font-medium transition duration-300 ease-out disabled:pointer-events-none disabled:opacity-50',
-      variants[variant] ?? variants.primary,
-      className
-    )
+const Button = ({ className = '', children, variant = 'primary', asChild = false, ...props }) => {
+  const classes = cn(
+    'inline-flex items-center justify-center gap-2 rounded-xl px-5 py-2.5 text-sm font-medium transition-all duration-200 cursor-pointer disabled:pointer-events-none disabled:opacity-50',
+    variants[variant] ?? variants.primary,
+    className
+  )
 
-    if (asChild && React.isValidElement(children)) {
-      return React.cloneElement(children, {
-        className: cn(classes, children.props.className),
-        ref,
-        ...props,
-      })
-    }
-
-    return (
-      <button ref={ref} type="button" className={classes} {...props}>
-        {children}
-      </button>
-    )
+  if (asChild && React.isValidElement(children)) {
+    return React.cloneElement(children, {
+      className: cn(classes, children.props.className),
+      ...props,
+    })
   }
-)
 
-Button.displayName = 'Button'
+  return (
+    <button type="button" className={classes} {...props}>
+      {children}
+    </button>
+  )
+}
 
 export { Button }

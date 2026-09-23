@@ -6,49 +6,34 @@ import React, {
   useMemo,
   useCallback,
 } from "react";
-import { FaArrowLeft, FaArrowRight } from "react-icons/fa";
+import { ArrowLeft, ArrowRight, Quote } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
 
 function calculateGap(width) {
   const minWidth = 1024;
   const maxWidth = 1456;
-  const minGap = 60;
-  const maxGap = 86;
+  const minGap = 50;
+  const maxGap = 80;
   if (width <= minWidth) return minGap;
   if (width >= maxWidth)
-    return Math.max(minGap, maxGap + 0.06018 * (width - maxWidth));
+    return Math.max(minGap, maxGap + 0.06 * (width - maxWidth));
   return minGap + (maxGap - minGap) * ((width - minWidth) / (maxWidth - minWidth));
 }
 
 export const CircularDisplay = ({
-  testimonials,
+  testimonials = [],
   autoplay = true,
-  colors = {},
-  fontSizes = {},
 }) => {
-  const colorName = colors.name ?? "#000";
-  const colorDesignation = colors.designation ?? "#6b7280";
-  const colorTestimony = colors.testimony ?? "#4b5563";
-  const colorArrowBg = colors.arrowBackground ?? "#141414";
-  const colorArrowFg = colors.arrowForeground ?? "#f1f1f7";
-  const colorArrowHoverBg = colors.arrowHoverBackground ?? "#00a6fb";
-  const fontSizeName = fontSizes.name ?? "1.5rem";
-  const fontSizeDesignation = fontSizes.designation ?? "0.925rem";
-  const fontSizeQuote = fontSizes.quote ?? "1.125rem";
-
   const [activeIndex, setActiveIndex] = useState(0);
-  const [hoverPrev, setHoverPrev] = useState(false);
-  const [hoverNext, setHoverNext] = useState(false);
-  const [containerWidth, setContainerWidth] = useState(1200);
-
+  const [containerWidth, setContainerWidth] = useState(1000);
   const imageContainerRef = useRef(null);
   const autoplayIntervalRef = useRef(null);
 
-  const testimonialsLength = useMemo(() => testimonials.length, [testimonials]);
-  const activeTestimonial = useMemo(
-    () => testimonials[activeIndex],
-    [activeIndex, testimonials]
-  );
+  const testimonialsLength = useMemo(() => (testimonials?.length || 0), [testimonials]);
+  const activeTestimonial = useMemo(() => {
+    if (!testimonials || testimonials.length === 0) return null;
+    return testimonials[activeIndex] || testimonials[0];
+  }, [activeIndex, testimonials]);
 
   useEffect(() => {
     function handleResize() {
@@ -62,239 +47,176 @@ export const CircularDisplay = ({
   }, []);
 
   useEffect(() => {
-    if (autoplay) {
+    if (autoplay && testimonialsLength > 1) {
       autoplayIntervalRef.current = setInterval(() => {
         setActiveIndex((prev) => (prev + 1) % testimonialsLength);
-      }, 5000);
+      }, 6000);
     }
     return () => {
       if (autoplayIntervalRef.current) clearInterval(autoplayIntervalRef.current);
     };
   }, [autoplay, testimonialsLength]);
 
-  useEffect(() => {
-    const handleKey = (e) => {
-      if (e.key === "ArrowLeft") handlePrev();
-      if (e.key === "ArrowRight") handleNext();
-    };
-    window.addEventListener("keydown", handleKey);
-    return () => window.removeEventListener("keydown", handleKey);
-    // eslint-disable-next-line
-  }, [activeIndex, testimonialsLength]);
-
   const handleNext = useCallback(() => {
+    if (testimonialsLength <= 1) return;
     setActiveIndex((prev) => (prev + 1) % testimonialsLength);
     if (autoplayIntervalRef.current) clearInterval(autoplayIntervalRef.current);
   }, [testimonialsLength]);
 
   const handlePrev = useCallback(() => {
+    if (testimonialsLength <= 1) return;
     setActiveIndex((prev) => (prev - 1 + testimonialsLength) % testimonialsLength);
     if (autoplayIntervalRef.current) clearInterval(autoplayIntervalRef.current);
   }, [testimonialsLength]);
 
+  if (!testimonials || testimonials.length === 0 || !activeTestimonial) {
+    return null;
+  }
+
   function getImageStyle(index) {
     const gap = calculateGap(containerWidth);
-    const maxStickUp = gap * 0.8;
+    const maxStickUp = gap * 0.7;
     const isActive = index === activeIndex;
     const isLeft = (activeIndex - 1 + testimonialsLength) % testimonialsLength === index;
     const isRight = (activeIndex + 1) % testimonialsLength === index;
+
     if (isActive) {
       return {
         zIndex: 3,
         opacity: 1,
         pointerEvents: "auto",
         transform: `translateX(0px) translateY(0px) scale(1) rotateY(0deg)`,
-        transition: "all 0.8s cubic-bezier(.4,2,.3,1)",
+        transition: "all 0.7s cubic-bezier(0.16, 1, 0.3, 1)",
       };
     }
     if (isLeft) {
       return {
         zIndex: 2,
-        opacity: 1,
+        opacity: 0.8,
         pointerEvents: "auto",
-        transform: `translateX(-${gap}px) translateY(-${maxStickUp}px) scale(0.85) rotateY(15deg)`,
-        transition: "all 0.8s cubic-bezier(.4,2,.3,1)",
+        transform: `translateX(-${gap}px) translateY(-${maxStickUp}px) scale(0.88) rotateY(12deg)`,
+        transition: "all 0.7s cubic-bezier(0.16, 1, 0.3, 1)",
       };
     }
     if (isRight) {
       return {
         zIndex: 2,
-        opacity: 1,
+        opacity: 0.8,
         pointerEvents: "auto",
-        transform: `translateX(${gap}px) translateY(-${maxStickUp}px) scale(0.85) rotateY(-15deg)`,
-        transition: "all 0.8s cubic-bezier(.4,2,.3,1)",
+        transform: `translateX(${gap}px) translateY(-${maxStickUp}px) scale(0.88) rotateY(-12deg)`,
+        transition: "all 0.7s cubic-bezier(0.16, 1, 0.3, 1)",
       };
     }
     return {
       zIndex: 1,
       opacity: 0,
       pointerEvents: "none",
-      transition: "all 0.8s cubic-bezier(.4,2,.3,1)",
+      transform: `translateX(0px) translateY(0px) scale(0.7)`,
+      transition: "all 0.7s cubic-bezier(0.16, 1, 0.3, 1)",
     };
   }
 
-  const quoteVariants = {
-    initial: { opacity: 0, y: 20 },
-    animate: { opacity: 1, y: 0 },
-    exit: { opacity: 0, y: -20 },
-  };
+  const quoteWords = activeTestimonial.text ? activeTestimonial.text.split(" ") : [];
 
   return (
-    <div className="testimonial-container">
-      <div className="testimonial-grid">
-        {/* Images */}
-        <div className="image-container" ref={imageContainerRef}>
-          {testimonials.map((testimonial, index) => (
-            <img
-              key={testimonial.image}
-              src={testimonial.image}
-              alt={testimonial.title}
-              className="testimonial-image"
-              data-index={index}
-              style={getImageStyle(index)}
-            />
-          ))}
+    <div className="w-full max-w-5xl mx-auto py-8">
+      <div className="grid grid-cols-1 md:grid-cols-12 gap-8 md:gap-12 items-center">
+        {/* 3D Stacking Image Showcase */}
+        <div className="md:col-span-6">
+          <div
+            className="relative w-full h-80 sm:h-96 [perspective:1000px] flex items-center justify-center"
+            ref={imageContainerRef}
+          >
+            {testimonials.map((testimonial, index) => (
+              <img
+                key={testimonial.image || index}
+                src={testimonial.image}
+                alt={testimonial.title}
+                className="absolute w-64 sm:w-72 h-80 sm:h-88 object-cover rounded-2xl border border-white/15 shadow-2xl"
+                style={getImageStyle(index)}
+              />
+            ))}
+          </div>
         </div>
-        {/* Content */}
-        <div className="testimonial-content">
+
+        {/* Testimonial / Story Content */}
+        <div className="md:col-span-6 flex flex-col justify-between space-y-6">
           <AnimatePresence mode="wait">
             <motion.div
               key={activeIndex}
-              variants={quoteVariants}
-              initial="initial"
-              animate="animate"
-              exit="exit"
-              transition={{ duration: 0.3, ease: "easeInOut" }}
+              initial={{ opacity: 0, y: 16 }}
+              animate={{ opacity: 1, y: 0 }}
+              exit={{ opacity: 0, y: -16 }}
+              transition={{ duration: 0.35, ease: "easeInOut" }}
+              className="space-y-4"
             >
-              <h3
-                className="name"
-                style={{ color: colorName, fontSize: fontSizeName }}
-              >
+              <div className="inline-flex items-center gap-1.5 text-accent">
+                <Quote className="w-5 h-5 opacity-70" />
+                <span className="text-xs font-semibold uppercase tracking-wider text-accent">
+                  {activeTestimonial.subtitle || "Who We Are"}
+                </span>
+              </div>
+
+              <h2 className="text-3xl sm:text-4xl font-semibold tracking-tight text-primary">
                 {activeTestimonial.title}
-              </h3>
-              <p
-                className="designation"
-                style={{ color: colorDesignation, fontSize: fontSizeDesignation }}
-              >
-                {activeTestimonial.subtitle}
-              </p>
-              <motion.p
-                className="quote"
-                style={{ color: colorTestimony, fontSize: fontSizeQuote }}
-              >
-                {activeTestimonial.text.split(" ").map((word, i) => (
+              </h2>
+
+              <p className="text-secondary text-sm sm:text-base leading-relaxed">
+                {quoteWords.map((word, i) => (
                   <motion.span
                     key={i}
-                    initial={{ filter: "blur(10px)", opacity: 0, y: 5 }}
-                    animate={{ filter: "blur(0px)", opacity: 1, y: 0 }}
+                    initial={{ opacity: 0, filter: "blur(4px)" }}
+                    animate={{ opacity: 1, filter: "blur(0px)" }}
                     transition={{
-                      duration: 0.22,
-                      ease: "easeInOut",
-                      delay: 0.025 * i,
+                      duration: 0.2,
+                      delay: Math.min(0.015 * i, 0.4),
                     }}
-                    style={{ display: "inline-block" }}
+                    className="inline-block"
                   >
                     {word}&nbsp;
                   </motion.span>
                 ))}
-              </motion.p>
+              </p>
             </motion.div>
           </AnimatePresence>
-          <div className="arrow-buttons">
-            <button
-              className="arrow-button prev-button"
-              onClick={handlePrev}
-              style={{
-                backgroundColor: hoverPrev ? colorArrowHoverBg : colorArrowBg,
-              }}
-              onMouseEnter={() => setHoverPrev(true)}
-              onMouseLeave={() => setHoverPrev(false)}
-              aria-label="Previous"
-            >
-              <FaArrowLeft size={28} color={colorArrowFg} />
-            </button>
-            <button
-              className="arrow-button next-button"
-              onClick={handleNext}
-              style={{
-                backgroundColor: hoverNext ? colorArrowHoverBg : colorArrowBg,
-              }}
-              onMouseEnter={() => setHoverNext(true)}
-              onMouseLeave={() => setHoverNext(false)}
-              aria-label="Next"
-            >
-              <FaArrowRight size={28} color={colorArrowFg} />
-            </button>
-          </div>
+
+          {/* Sleek Navigation Controls */}
+          {testimonialsLength > 1 && (
+            <div className="flex items-center gap-3 pt-2">
+              <button
+                type="button"
+                onClick={handlePrev}
+                aria-label="Previous story"
+                className="w-10 h-10 rounded-full border border-white/15 bg-white/[0.03] text-primary flex items-center justify-center hover:border-accent/60 hover:text-accent hover:bg-white/[0.06] transition-all duration-200 cursor-pointer"
+              >
+                <ArrowLeft className="w-4 h-4" />
+              </button>
+              <button
+                type="button"
+                onClick={handleNext}
+                aria-label="Next story"
+                className="w-10 h-10 rounded-full border border-white/15 bg-white/[0.03] text-primary flex items-center justify-center hover:border-accent/60 hover:text-accent hover:bg-white/[0.06] transition-all duration-200 cursor-pointer"
+              >
+                <ArrowRight className="w-4 h-4" />
+              </button>
+
+              <div className="flex items-center gap-1.5 ml-3">
+                {testimonials.map((_, idx) => (
+                  <button
+                    key={idx}
+                    type="button"
+                    onClick={() => setActiveIndex(idx)}
+                    className={`h-1.5 rounded-full transition-all duration-200 ${
+                      idx === activeIndex ? "w-6 bg-accent" : "w-1.5 bg-white/20 hover:bg-white/40"
+                    }`}
+                    aria-label={`Go to slide ${idx + 1}`}
+                  />
+                ))}
+              </div>
+            </div>
+          )}
         </div>
       </div>
-      <style>{`
-        .testimonial-container {
-          width: 100%;
-          max-width: 56rem;
-          padding: 2rem;
-        }
-        .testimonial-grid {
-          display: grid;
-          gap: 5rem;
-        }
-        .image-container {
-          position: relative;
-          width: 100%;
-          height: 24rem;
-          perspective: 1000px;
-        }
-        .testimonial-image {
-          position: absolute;
-          width: 100%;
-          height: 100%;
-          object-fit: cover;
-          border-radius: 1.5rem;
-          box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
-        }
-        .testimonial-content {
-          display: flex;
-          flex-direction: column;
-          justify-content: space-between;
-        }
-        .name {
-          font-weight: bold;
-          margin-bottom: 0.25rem;
-        }
-        .designation {
-          margin-bottom: 2rem;
-        }
-        .quote {
-          line-height: 1.75;
-        }
-        .arrow-buttons {
-          display: flex;
-          gap: 1.5rem;
-          padding-top: 3rem;
-        }
-        .arrow-button {
-          width: 2.7rem;
-          height: 2.7rem;
-          border-radius: 50%;
-          display: flex;
-          align-items: center;
-          justify-content: center;
-          cursor: pointer;
-          transition: background-color 0.3s;
-          border: none;
-        }
-        .word {
-          display: inline-block;
-        }
-        @media (min-width: 768px) {
-          .testimonial-grid {
-            grid-template-columns: 1fr 1fr;
-          }
-          .arrow-buttons {
-            padding-top: 0;
-          }
-        }
-      `}</style>
     </div>
   );
 };
