@@ -1,11 +1,12 @@
 import React, { useEffect, useState } from 'react'
-import ProjectCard from '../components/ProjectCard'
+import ProjectCard, { ProjectModal } from '../components/ProjectCard'
 import { client } from '../sanityClient'
-import { motion } from 'framer-motion'
+import { motion, AnimatePresence } from 'framer-motion'
 
 const Projects = () => {
   const [projects, setProjects] = useState([])
   const [loading, setLoading] = useState(true)
+  const [selectedProject, setSelectedProject] = useState(null)
 
   useEffect(() => {
     const fetchProjects = async () => {
@@ -66,17 +67,8 @@ const Projects = () => {
               date={project.date} 
               image={project.image}
               index={index}
-            > 
-              {project.description && (
-                <p className="text-secondary leading-relaxed">{project.description}</p>
-              )}
-              {project.sections?.map((section, i) => (
-                <div key={i} className="space-y-1 pt-2">
-                  <h4 className="font-semibold text-primary text-base">{section.heading}</h4>
-                  <p className="text-secondary text-sm leading-relaxed">{section.body}</p>
-                </div>
-              ))}
-            </ProjectCard>
+              onClick={() => setSelectedProject(project)}
+            />
           ))
         ) : (
           <div className="col-span-full text-center text-secondary/50 py-16 border border-white/5 rounded-2xl bg-white/[0.01]">
@@ -84,6 +76,16 @@ const Projects = () => {
           </div>
         )}
       </div>
+
+      {/* Expanded Project Modal */}
+      <AnimatePresence>
+        {selectedProject && (
+          <ProjectModal
+            project={selectedProject}
+            onClose={() => setSelectedProject(null)}
+          />
+        )}
+      </AnimatePresence>
     </div>
   )
 }

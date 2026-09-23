@@ -1,4 +1,5 @@
 import { NavLink } from 'react-router-dom'
+import { motion } from 'framer-motion'
 import SH from '/SH.png'
 import StaggeredMenu from './StaggeredMenu'
 
@@ -30,20 +31,31 @@ const Navbar = () => {
         </NavLink>
 
         {/* Desktop Navigation Links */}
-        <nav className="hidden lg:flex items-center gap-1.5" aria-label="Main Navigation">
+        <nav className="hidden lg:flex items-center gap-7" aria-label="Main Navigation">
           {menuItems.map((item) => (
             <NavLink
               key={item.link}
               to={item.link}
               className={({ isActive }) =>
-                `px-3.5 py-1.5 rounded-lg text-sm font-medium transition-all duration-200 ${
+                `relative py-1 text-sm font-medium transition-colors duration-200 ${
                   isActive
-                    ? 'text-accent bg-accent/[0.08] shadow-[inset_0_0_0_1px_rgba(254,178,58,0.2)]'
-                    : 'text-secondary hover:text-primary hover:bg-white/[0.04]'
+                    ? 'text-primary'
+                    : 'text-secondary hover:text-primary'
                 }`
               }
             >
-              {item.label}
+              {({ isActive }) => (
+                <div className="relative flex flex-col items-center">
+                  <span>{item.label}</span>
+                  {isActive && (
+                    <motion.span
+                      layoutId="navbar-underline"
+                      className="absolute -bottom-1.5 left-0 right-0 h-[2px] bg-accent rounded-full shadow-[0_1px_6px_rgba(254,178,58,0.4)]"
+                      transition={{ type: 'spring', stiffness: 380, damping: 30 }}
+                    />
+                  )}
+                </div>
+              )}
             </NavLink>
           ))}
         </nav>

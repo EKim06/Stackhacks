@@ -4,10 +4,9 @@ import { Link } from 'react-router-dom'
 import { motion } from 'framer-motion'
 import { ArrowRight, ArrowUpRight } from 'lucide-react'
 
-function InfiniteSlider({ children, speed = 35, speedOnHover = 70, gap = 72 }) {
+function InfiniteSlider({ children, speed = 35, gap = 48 }) {
   const trackRef = useRef(null)
   const posRef = useRef(0)
-  const hoveredRef = useRef(false)
   const rafRef = useRef(null)
 
   useEffect(() => {
@@ -18,7 +17,7 @@ function InfiniteSlider({ children, speed = 35, speedOnHover = 70, gap = 72 }) {
       const half = track.scrollWidth / 2
       if (half === 0) { rafRef.current = requestAnimationFrame(animate); return }
 
-      const pxPerFrame = half / ((hoveredRef.current ? speedOnHover : speed) * 60)
+      const pxPerFrame = half / (speed * 60)
       posRef.current = (posRef.current + pxPerFrame) % half
       track.style.transform = `translateX(-${posRef.current}px)`
       rafRef.current = requestAnimationFrame(animate)
@@ -26,17 +25,13 @@ function InfiniteSlider({ children, speed = 35, speedOnHover = 70, gap = 72 }) {
 
     rafRef.current = requestAnimationFrame(animate)
     return () => cancelAnimationFrame(rafRef.current)
-  }, [speed, speedOnHover])
+  }, [speed])
 
   const items = React.Children.toArray(children)
   const doubled = [...items, ...items]
 
   return (
-    <div
-      className="overflow-hidden"
-      onMouseEnter={() => { hoveredRef.current = true }}
-      onMouseLeave={() => { hoveredRef.current = false }}
-    >
+    <div className="overflow-hidden">
       <div
         ref={trackRef}
         style={{ display: 'flex', width: 'max-content', gap: `${gap}px`, alignItems: 'center', willChange: 'transform' }}
@@ -98,7 +93,7 @@ export default function Hero() {
       <div className="pb-20 pt-10 sm:pt-16 md:pb-28 lg:pb-36 border-b border-white/[0.08] relative">
         <div className="relative mx-auto flex max-w-6xl flex-col px-6 lg:block">
           <div className="mx-auto max-w-xl text-center lg:ml-0 lg:w-3/5 lg:text-left z-10 relative">
-            
+
             {/* Clean Typographic Eyebrow */}
             <motion.p
               initial={{ opacity: 0, y: 16 }}
@@ -174,14 +169,14 @@ export default function Hero() {
             </div>
 
             <div className="relative py-2 w-full overflow-hidden">
-              <InfiniteSlider speed={35} speedOnHover={15} gap={48}>
+              <InfiniteSlider speed={35} gap={48}>
                 {!loading && companies.map((company) => (
                   <div
                     key={company._id}
-                    className="flex items-center justify-center w-36 h-16 px-4 py-2 rounded-xl bg-white/[0.02] border border-white/5 hover:border-white/20 transition-all duration-300 group"
+                    className="flex items-center justify-center w-36 h-16 px-4 py-2 rounded-xl bg-white/[0.03] border border-white/10"
                   >
                     <img
-                      className="max-h-9 max-w-[110px] object-contain opacity-50 grayscale contrast-125 transition-all duration-300 group-hover:opacity-100 group-hover:grayscale-0 group-hover:brightness-110"
+                      className="max-h-9 max-w-[110px] object-contain"
                       src={company.image}
                       alt={`${company.title} Logo`}
                     />

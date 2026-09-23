@@ -167,7 +167,7 @@ function MemberCard({ member, onClick, index }) {
       viewport={{ once: true }}
       transition={{ duration: 0.45, delay: index * 0.06 }}
       onClick={onClick}
-      className="tech-card p-6 flex flex-col items-center text-center space-y-4 hover:border-accent/40 hover:-translate-y-1 transition-all duration-300 cursor-pointer group"
+      className="tech-card p-6 flex flex-col items-center text-center space-y-4 hover:border-accent/60 hover:shadow-[0_0_28px_rgba(254,178,58,0.25)] hover:-translate-y-1 transition-all duration-300 cursor-pointer group"
     >
       {/* Circular Avatar Matching Attached Reference */}
       <div className="relative w-36 h-36 sm:w-40 sm:h-40 rounded-full overflow-hidden border-2 border-white/10 group-hover:border-accent/60 shadow-xl mx-auto bg-white/[0.02] shrink-0">

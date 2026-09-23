@@ -344,7 +344,8 @@ export const StaggeredMenu = ({
         }
 
         .sm-scope .sm-prelayers {
-          position: fixed; top: 0; right: 0; bottom: 0;
+          position: fixed; top: 0; right: 0;
+          height: 100vh; height: 100dvh;
           width: clamp(260px, 38vw, 420px);
           pointer-events: none; z-index: 45;
         }
@@ -353,7 +354,7 @@ export const StaggeredMenu = ({
 
         .sm-scope .sm-panel {
           position: fixed; top: 0; right: 0;
-          width: clamp(260px, 38vw, 420px); height: 100vh;
+          width: clamp(260px, 38vw, 420px); height: 100vh; height: 100dvh;
           background: #111111; display: flex; flex-direction: column;
           padding: 4em 2em 2em 2em; overflow-y: auto; z-index: 50;
         }

@@ -17,6 +17,9 @@ router.post("/", async (req, res) => {
         let newEvent = {
             title: req.body.title,
             date: req.body.date,
+            location: req.body.location,
+            rsvpLink: req.body.rsvpLink,
+            buttonText: req.body.buttonText,
             image: req.body.image,
             description: req.body.description,
             createdAt: new Date() // Optional: good for sorting
@@ -38,6 +41,9 @@ router.patch("/:id", async (req, res) => {
             $set: {
                 title: req.body.title,
                 date: req.body.date,
+                location: req.body.location,
+                rsvpLink: req.body.rsvpLink,
+                buttonText: req.body.buttonText,
                 image: req.body.image,
                 description: req.body.description,
             },

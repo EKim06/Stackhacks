@@ -26,7 +26,7 @@ function EventDetailModal({ event, onClose }) {
 
   return createPortal(
     <motion.div
-      className="fixed inset-0 z-[100] flex items-center justify-center p-4 sm:p-6 bg-black/80 backdrop-blur-md"
+      className="fixed inset-0 z-[100] flex items-center justify-center p-3 sm:p-6 bg-black/80 backdrop-blur-md"
       initial={{ opacity: 0 }}
       animate={{ opacity: 1 }}
       exit={{ opacity: 0 }}
@@ -34,17 +34,17 @@ function EventDetailModal({ event, onClose }) {
       onClick={onClose}
     >
       <motion.div
-        className="relative bg-[#141416] border border-white/15 flex flex-col md:flex-row rounded-2xl overflow-hidden shadow-2xl w-full max-w-4xl h-[560px] max-h-[90vh]"
+        className="relative bg-[#141416] border border-white/15 flex flex-col md:flex-row rounded-2xl shadow-2xl w-full max-w-4xl h-auto max-h-[90vh] md:h-[560px] overflow-y-auto md:overflow-hidden"
         initial={{ opacity: 0, scale: 0.94, y: 16 }}
         animate={{ opacity: 1, scale: 1, y: 0 }}
         exit={{ opacity: 0, scale: 0.94, y: 16 }}
         transition={{ duration: 0.25, ease: [0.16, 1, 0.3, 1] }}
         onClick={(e) => e.stopPropagation()}
       >
-        {/* Left Column: Enlarged container displaying full image without warping */}
+        {/* Left Column: Enlarged container displaying full image prominently on both mobile and desktop */}
         {event.image && (
-          <div className="md:w-1/2 w-full h-1/2 md:h-full shrink-0 flex items-center justify-center p-4 sm:p-6 bg-black/40 border-b md:border-b-0 md:border-r border-white/10">
-            <div className="w-full h-full flex items-center justify-center rounded-xl bg-black/50 border border-white/10 p-2 overflow-hidden shadow-inner">
+          <div className="w-full md:w-1/2 shrink-0 flex items-center justify-center p-4 sm:p-6 bg-black/40 border-b md:border-b-0 md:border-r border-white/10">
+            <div className="w-full h-64 sm:h-80 md:h-full flex items-center justify-center rounded-xl bg-black/50 border border-white/10 p-2 overflow-hidden shadow-inner">
               <img
                 src={event.image}
                 alt={event.title}
@@ -54,23 +54,23 @@ function EventDetailModal({ event, onClose }) {
           </div>
         )}
 
-        {/* Right Column: Event Details with fixed layout & internal scrolling for description */}
-        <div className={`${event.image ? 'md:w-1/2 w-full h-1/2 md:h-full' : 'w-full h-full'} p-6 sm:p-8 flex flex-col justify-between overflow-hidden`}>
-          {/* Top section: Title and Metadata (pinned) */}
-          <div className="shrink-0 space-y-3">
+        {/* Right Column: Event Details - dynamically sized on mobile, fixed height on desktop */}
+        <div className={`${event.image ? 'md:w-1/2' : 'w-full'} w-full p-5 sm:p-6 md:p-8 flex flex-col md:justify-between md:h-full md:overflow-hidden`}>
+          {/* Top section: Title and Metadata */}
+          <div className="shrink-0 space-y-2.5 sm:space-y-3">
             <div>
-              <span className="text-xs font-semibold uppercase tracking-wider text-accent">
+              <span className="text-[11px] sm:text-xs font-semibold uppercase tracking-wider text-accent">
                 Event Details
               </span>
-              <h2 className="text-2xl sm:text-3xl font-bold text-primary mt-1 leading-snug">
+              <h2 className="text-xl sm:text-2xl md:text-3xl font-bold text-primary mt-0.5 leading-snug">
                 {event.title}
               </h2>
             </div>
 
             {eventDate && !isNaN(eventDate.getTime()) && (
-              <div className="space-y-2 py-3 border-y border-white/[0.08] text-sm text-secondary">
+              <div className="space-y-1.5 sm:space-y-2 py-2 sm:py-3 border-y border-white/[0.08] text-xs sm:text-sm text-secondary">
                 <div className="flex items-center gap-2">
-                  <CalendarIcon className="w-4 h-4 text-accent shrink-0" />
+                  <CalendarIcon className="w-3.5 h-3.5 sm:w-4 sm:h-4 text-accent shrink-0" />
                   <span>
                     {eventDate.toLocaleDateString('en-US', {
                       weekday: 'long',
@@ -81,7 +81,7 @@ function EventDetailModal({ event, onClose }) {
                   </span>
                 </div>
                 <div className="flex items-center gap-2">
-                  <Clock className="w-4 h-4 text-accent shrink-0" />
+                  <Clock className="w-3.5 h-3.5 sm:w-4 sm:h-4 text-accent shrink-0" />
                   <span>
                     {eventDate.toLocaleTimeString('en-US', {
                       hour: 'numeric',
@@ -90,30 +90,30 @@ function EventDetailModal({ event, onClose }) {
                   </span>
                 </div>
                 <div className="flex items-center gap-2">
-                  <MapPin className="w-4 h-4 text-accent shrink-0" />
-                  <span>Binghamton University &middot; Watson College</span>
+                  <MapPin className="w-3.5 h-3.5 sm:w-4 sm:h-4 text-accent shrink-0" />
+                  <span>{event.location || "Binghamton University \u00B7 Main Campus"}</span>
                 </div>
               </div>
             )}
           </div>
 
-          {/* Middle section: Description with dedicated internal scrollbar if text is long */}
-          <div className="flex-1 min-h-0 overflow-y-auto pr-2 my-2 space-y-2 focus:outline-none">
-            <p className="text-secondary leading-relaxed text-sm whitespace-pre-line">
+          {/* Middle section: Description with natural height on mobile, dedicated scrollbar on desktop */}
+          <div className="my-3 sm:my-4 md:flex-1 md:min-h-0 md:overflow-y-auto md:pr-2 focus:outline-none">
+            <p className="text-secondary leading-relaxed text-xs sm:text-sm whitespace-pre-line">
               {event.description || "Join StackHacks for an interactive coding and networking session."}
             </p>
           </div>
 
-          {/* Bottom section: RSVP action (pinned) */}
-          <div className="shrink-0 pt-3 border-t border-white/[0.08]">
+          {/* Bottom section: RSVP action with customizable link and content */}
+          <div className="pt-3 sm:pt-4 border-t border-white/[0.08] shrink-0 mt-2 md:mt-0">
             <a
-              href="https://www.instagram.com/stackhacksbu/?hl=en"
+              href={event.rsvpLink || "https://www.instagram.com/stackhacksbu/?hl=en"}
               target="_blank"
               rel="noopener noreferrer"
-              className="btn-primary w-full"
+              className="inline-flex items-center justify-center gap-2 px-5 py-2.5 rounded-xl text-xs sm:text-sm font-semibold cursor-pointer bg-accent text-black transition-all duration-200 hover:bg-[#e09825] hover:brightness-90 active:brightness-75 w-full shadow-sm"
             >
-              <span>RSVP via Instagram</span>
-              <ExternalLink className="w-4 h-4" />
+              <span>{event.buttonText || "Learn More"}</span>
+              <ExternalLink className="w-3.5 h-3.5 sm:w-4 sm:h-4" />
             </a>
           </div>
         </div>
@@ -123,7 +123,7 @@ function EventDetailModal({ event, onClose }) {
           onClick={onClose}
           type="button"
           aria-label="Close dialog"
-          className="absolute top-3 right-3 z-30 w-8 h-8 flex items-center justify-center rounded-full border border-white/15 bg-black/60 backdrop-blur-md text-secondary hover:text-white hover:border-white/30 transition-all duration-150 cursor-pointer"
+          className="absolute top-3 right-3 z-30 w-8 h-8 flex items-center justify-center rounded-full border border-white/15 bg-black/60 backdrop-blur-md text-secondary hover:text-white hover:bg-black/90 hover:brightness-90 active:brightness-75 transition-all duration-150 cursor-pointer"
         >
           <X className="w-4 h-4" />
         </button>
@@ -150,6 +150,9 @@ const Events = () => {
           _id,
           title,
           date,
+          location,
+          rsvpLink,
+          buttonText,
           "image": image.asset->url,
           description
         }`
@@ -293,7 +296,7 @@ const Events = () => {
                 type="button"
                 onClick={prevMonth}
                 aria-label="Previous month"
-                className="w-9 h-9 rounded-full border border-white/15 bg-white/[0.03] text-primary flex items-center justify-center hover:border-accent/60 hover:text-accent hover:bg-white/[0.08] transition-all duration-200 cursor-pointer"
+                className="w-9 h-9 rounded-full border border-white/15 bg-white/[0.03] text-primary flex items-center justify-center hover:bg-black/40 hover:border-white/30 hover:brightness-90 active:brightness-75 transition-all duration-200 cursor-pointer"
               >
                 <ChevronLeft className="w-4 h-4" />
               </button>
@@ -301,7 +304,7 @@ const Events = () => {
                 type="button"
                 onClick={nextMonth}
                 aria-label="Next month"
-                className="w-9 h-9 rounded-full border border-white/15 bg-white/[0.03] text-primary flex items-center justify-center hover:border-accent/60 hover:text-accent hover:bg-white/[0.08] transition-all duration-200 cursor-pointer"
+                className="w-9 h-9 rounded-full border border-white/15 bg-white/[0.03] text-primary flex items-center justify-center hover:bg-black/40 hover:border-white/30 hover:brightness-90 active:brightness-75 transition-all duration-200 cursor-pointer"
               >
                 <ChevronRight className="w-4 h-4" />
               </button>
@@ -354,7 +357,7 @@ const Events = () => {
                       setSelectedDate(null)
                     }
                   }}
-                  className={`aspect-square relative rounded-xl sm:rounded-2xl flex flex-col items-center justify-center transition-all duration-200 p-1 group cursor-pointer overflow-hidden ${
+                  className={`aspect-square relative rounded-xl sm:rounded-2xl flex flex-col items-center justify-center transition-all duration-200 p-1 group cursor-pointer overflow-hidden hover:brightness-90 active:brightness-75 ${
                     isSelected
                       ? 'border-2 border-accent bg-accent/20 shadow-[0_0_20px_rgba(254,178,58,0.4)] ring-2 ring-accent/40'
                       : isToday
@@ -418,7 +421,7 @@ const Events = () => {
               <button
                 type="button"
                 onClick={() => setSelectedDate(null)}
-                className="text-accent hover:underline cursor-pointer"
+                className="text-accent hover:underline hover:brightness-90 active:brightness-75 transition-all duration-200 cursor-pointer"
               >
                 Clear date filter &times;
               </button>
@@ -445,8 +448,8 @@ const Events = () => {
               onClick={() => setActiveTab('upcoming')}
               className={`flex-1 py-2.5 text-xs sm:text-sm font-semibold rounded-lg transition-all duration-200 cursor-pointer ${
                 activeTab === 'upcoming'
-                  ? 'bg-accent text-black shadow-md'
-                  : 'text-secondary hover:text-primary hover:bg-white/[0.03]'
+                  ? 'bg-accent text-black shadow-md hover:bg-[#e09825] hover:brightness-90 active:brightness-75'
+                  : 'text-secondary hover:text-white hover:bg-black/40 hover:brightness-90 active:brightness-75'
               }`}
             >
               UPCOMING ({upcomingEvents.length})
@@ -456,8 +459,8 @@ const Events = () => {
               onClick={() => setActiveTab('past')}
               className={`flex-1 py-2.5 text-xs sm:text-sm font-semibold rounded-lg transition-all duration-200 cursor-pointer ${
                 activeTab === 'past'
-                  ? 'bg-accent text-black shadow-md'
-                  : 'text-secondary hover:text-primary hover:bg-white/[0.03]'
+                  ? 'bg-accent text-black shadow-md hover:bg-[#e09825] hover:brightness-90 active:brightness-75'
+                  : 'text-secondary hover:text-white hover:bg-black/40 hover:brightness-90 active:brightness-75'
               }`}
             >
               PAST ({pastEvents.length})
@@ -498,16 +501,6 @@ const Events = () => {
 
                       {/* Right: Content details */}
                       <div className="space-y-2 flex-grow">
-                        {/* Top Category & Location pills */}
-                        <div className="flex items-center gap-2">
-                          <span className="px-2.5 py-0.5 rounded-full text-[10px] font-semibold uppercase tracking-wider bg-accent/15 text-accent border border-accent/30">
-                            Workshop
-                          </span>
-                          <span className="text-[11px] text-secondary/70 uppercase tracking-wide">
-                            Watson College
-                          </span>
-                        </div>
-
                         {/* Title */}
                         <h3 className="text-lg font-semibold text-primary group-hover:text-accent transition-colors leading-snug">
                           {event.title}
@@ -520,15 +513,15 @@ const Events = () => {
                               <Clock className="w-3.5 h-3.5 text-accent" />
                               <span>
                                 {eventDate.toLocaleTimeString('en-US', {
-                                  hour: 'numeric',
-                                  minute: '2-digit',
-                                })}
+                                   hour: 'numeric',
+                                   minute: '2-digit',
+                                 })}
                               </span>
                             </div>
                             <div className="flex items-center gap-1.5">
-                              <MapPin className="w-3.5 h-3.5 text-accent" />
+                              <MapPin className="w-3.5 h-3.5 text-accent shrink-0" />
                               <span className="line-clamp-1">
-                                Binghamton University &middot; Main Campus
+                                {event.location || "Binghamton University \u00B7 Main Campus"}
                               </span>
                             </div>
                           </div>
@@ -541,15 +534,11 @@ const Events = () => {
                       <button
                         type="button"
                         onClick={() => setSelectedEvent(event)}
-                        className="inline-flex items-center gap-1.5 px-4 py-1.5 rounded-xl bg-accent text-black font-semibold text-xs transition-all hover:bg-[#ffbe4a] hover:shadow-[0_0_16px_rgba(254,178,58,0.3)] cursor-pointer"
+                        className="inline-flex items-center gap-1.5 px-4 py-1.5 rounded-xl bg-accent text-black font-semibold text-xs transition-all duration-200 hover:bg-[#e09825] hover:brightness-90 active:brightness-75 cursor-pointer shadow-sm"
                       >
                         <span>Details</span>
                         <ExternalLink className="w-3.5 h-3.5" />
                       </button>
-
-                      <span className="text-[11px] text-secondary/60">
-                        Free for all students
-                      </span>
                     </div>
                   </motion.div>
                 )
@@ -561,7 +550,7 @@ const Events = () => {
                   <button
                     type="button"
                     onClick={() => setSelectedDate(null)}
-                    className="text-xs text-accent hover:underline cursor-pointer"
+                    className="inline-flex items-center justify-center px-3 py-1.5 rounded-lg text-xs bg-white/[0.04] border border-white/10 text-accent hover:bg-black/40 hover:brightness-90 active:brightness-75 transition-all duration-200 mt-2 font-mono cursor-pointer"
                   >
                     View all {activeTab} events
                   </button>
